@@ -7,7 +7,7 @@ const Footer = () => {
   return (
     <footer className="footer">
       <div className="footer-left">
-        <img src="/images/logo.png" alt="Logo" className="footer-logo" />
+        <img src="/images/logo2.jpg" alt="Logo" className="footer-logo" />
         <span className="footer-text">2025 Bazar K-Fé. Todos los derechos reservados</span>
         <div className="footer-social">
           <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer">

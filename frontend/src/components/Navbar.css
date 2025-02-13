@@ -34,4 +34,10 @@
   .navbar-right {
     color: white;
   }
+
+  .logo-img {
+    height: 100px; 
+    width: auto;
+  }
+  
   
