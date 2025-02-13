@@ -1,4 +1,3 @@
-// src/components/Navbar.js
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './Navbar.css';
@@ -9,7 +8,9 @@ const Navbar = () => {
     <nav className="navbar">
       <div className="navbar-left">
         <div className="logo">
-          <Link to="/" style={{ textDecoration: 'none', color: 'white' }}>Logo</Link>
+          <Link to="/">
+            <img src="/images/logo1.jpg" alt="Logo" className="logo-img" />
+          </Link>
         </div>
         <ul className="nav-links">
           <li><Link to="/" style={{ textDecoration: 'none', color: 'white' }}>Inicio</Link></li>

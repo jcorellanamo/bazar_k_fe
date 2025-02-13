@@ -3,6 +3,8 @@ import React from 'react';
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
+import "./FeaturedProductsCarousel.css";
+
 
 const FeaturedProductsCarousel = () => {
   const settings = {
@@ -16,24 +18,28 @@ const FeaturedProductsCarousel = () => {
   };
 
   const products = [
-    '/images/product1.jpg',
-    '/images/product2.jpg',
-    '/images/product3.jpg',
-    '/images/product4.jpg',
-    '/images/product5.jpg'
+    '/productos/01_productos.png',
+    '/productos/02_productos.png',
+    '/productos/03_productos.png',
+    '/productos/04_productos.png',
+    '/productos/05_productos.png',
+    '/productos/06_productos.png',
+    '/productos/07_productos.png',
+    
   ];
 
   return (
-    <div style={{ padding: '20px' }}>
-      <h2 style={{ textAlign: 'center' }}>Productos Destacados</h2>
-      <Slider {...settings}>
-        {products.map((img, index) => (
-          <div key={index}>
-            <img src={img} alt={`product-${index}`} style={{ width: '100%', height: 'auto' }} />
-          </div>
-        ))}
-      </Slider>
-    </div>
+    <div className="carousel-container">
+    <h2 className="carousel-title">Productos Destacados</h2>
+    <Slider {...settings}>
+      {products.map((img, index) => (
+        <div key={index} className="carousel-item">
+          <img src={img} alt={`product-${index}`} />
+        </div>
+      ))}
+    </Slider>
+  </div>
+  
   );
 };
 
