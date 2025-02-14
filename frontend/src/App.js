@@ -8,7 +8,7 @@ import Productos from './views/Productos';
 import Login from './views/Login';
 import Registrarse from './views/Registrarse';
 import Contacto from './views/Contacto';
-//import Blog from './views/Blog';
+import Blog from './views/Blog';
 
 function App() {
   return (
@@ -21,6 +21,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/registrarse" element={<Registrarse />} />
           <Route path="/contacto" element={<Contacto />} />
+          <Route path="/blog" element={<Blog />} />
+
 
         </Routes>
         <Footer />
