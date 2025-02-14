@@ -1,0 +1,44 @@
+[
+  {
+    "id_producto": 1,
+    "imagen": "/productos/01_productos.png",
+    "marca": "Marca A",
+    "descripcion": "Café de alta calidad, aroma intenso.",
+    "precio": "$13.990"
+  },
+  {
+    "id_producto": 2,
+    "imagen": "/productos/02_productos.png",
+    "marca": "Marca B",
+    "descripcion": "Café orgánico, sabor excepcional.",
+    "precio": "$13.990"
+  },
+  {
+    "id_producto": 3,
+    "imagen": "/productos/03_productos.png",
+    "marca": "Marca C",
+    "descripcion": "Café premium, tostado perfecto.",
+    "precio": "$13.990"
+  },
+  {
+    "id_producto": 4,
+    "imagen": "/productos/04_productos.png",
+    "marca": "Marca D",
+    "descripcion": "Café suave, ideal para el día.",
+    "precio": "$13.990"
+  },
+  {
+    "id_producto": 5,
+    "imagen": "/productos/05_productos.png",
+    "marca": "Marca E",
+    "descripcion": "Café con notas a chocolate.",
+    "precio": "$13.990"
+  },
+  {
+    "id_producto": 6,
+    "imagen": "/productos/06_productos.png",
+    "marca": "Marca F",
+    "descripcion": "Café de origen único, sabor inigualable.",
+    "precio": "$13.990"
+  }
+]
