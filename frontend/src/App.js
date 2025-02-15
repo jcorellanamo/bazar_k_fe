@@ -21,7 +21,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/registrarse" element={<Registrarse />} />
         <Route path="/contacto" element={<Contacto />} />
-        <Route path="/detalle/:productoId" element={<DetalleProducto />} />{" "}
+        <Route path="/detalle/:productoId" element={<DetalleProducto />} />
         {/* Ruta de detalle del producto */}
         <Route path="*" element={<NotFound />} />
       </Routes>
