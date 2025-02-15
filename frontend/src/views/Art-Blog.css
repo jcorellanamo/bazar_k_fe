@@ -29,12 +29,10 @@ body {
   .blog-text {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 40px; /* Mayor separación entre elementos */
-   
-    padding: 20px;
+    gap: 10px; /* Mayor separación entre elementos */
+    padding: 10px;
     justify-content: space-between;
-   
-    padding: 20px;
+     padding: 20px;
   }
 
   .blog-text-column {
@@ -78,13 +76,14 @@ body {
   .cards-wrapper {
     display: flex;
     justify-content: space-between; 
-    gap: 20px;
-    flex-wrap: wrap;
+    gap: 10px;
+    flex-wrap: nowrap;
+
     position: relative;
   }
   
   .card {
-    width: 35rem;
+    width: 30rem;
     border: 1px solid #ddd;
     border-radius: 8px;
     overflow: hidden;
