@@ -8,9 +8,12 @@ import Productos from './views/Productos';
 import Login from './views/Login';
 import Registrarse from './views/Registrarse';
 import Contacto from './views/Contacto';
-import Blog from './views/Blog';
 import DetalleProducto from "./views/DetalleProducto";
 import { NotFound } from "./views/NotFound";
+import ArtBlog from './views/Art-Blog';
+import BlogVista1 from './views/BlogVista1';
+import BlogVista2 from './views/BlogVista2';
+import BlogVista3 from './views/BlogVista3';
 
 function App() {
   return (
@@ -22,10 +25,15 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/registrarse" element={<Registrarse />} />
         <Route path="/contacto" element={<Contacto />} />
-        <Route path="/blog" element={<Blog />} />
+        <Route path="/blog" element={<ArtBlog />} />
         <Route path="/detalle/:productoId" element={<DetalleProducto />} />
         {/* Ruta de detalle del producto */}
         <Route path="*" element={<NotFound />} />
+        <Route path="/vista1" element={<BlogVista1/>} />
+        <Route path="/vista2" element={<BlogVista2/>} />
+        <Route path="/vista3" element={<BlogVista3/>} />
+        
+
       </Routes>
       <Footer />
     </div>

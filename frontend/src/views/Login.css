@@ -1,106 +1,37 @@
-/* src/views/Login.css */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; 
+}
 
 .login-container {
-    display: flex;
-    min-height: calc(100vh - 60px); /* Ajusta según la altura del Navbar */
-  }
-  
-  .login-image {
-    flex: 1;
-  }
-  
-  .login-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  
-  .login-form-container {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 40px;
-    background-color: #f9f9f9;
-  }
-  
-  .login-form-container h1 {
-    margin-bottom: 10px;
-    font-size: 2rem;
-    color: #333;
-  }
-  
-  .login-form-container p {
-    margin-bottom: 20px;
-    color: #666;
-    font-size: 1rem;
-  }
-  
-  .login-form {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .input-group {
-    margin-bottom: 15px;
-  }
-  
-  .input-group input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 1rem;
-  }
-  
-  .checkbox-group {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-  }
-  
-  .checkbox-group input[type="checkbox"] {
-    margin-right: 10px;
-  }
-  
-  .terms-label {
-    color: purple;
-    font-size: 0.9rem;
-  }
-  
-  .forget-password {
-    margin-left: auto;
-    color: blue;
-    text-decoration: underline;
-    cursor: pointer;
-    font-size: 0.9rem;
-  }
-  
-  .btn-login {
-    background-color: purple;
-    color: #fff;
-    border: none;
-    padding: 12px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 1rem;
-    margin-bottom: 15px;
-    transition: background-color 0.3s ease;
-  }
-  
-  .btn-login:hover {
-    background-color: #5a007a;
-  }
-  
-  .member-text {
-    text-align: center;
-    font-size: 0.9rem;
-    color: #333;
-  }
-  
-  .signup-link {
-    color: blue;
-    text-decoration: underline;
-    cursor: pointer;
-  }
-  
+  display: flex;
+  flex: 1; 
+}
+
+.login-image {
+  flex: 1;
+  height: 100vh;
+}
+
+.login-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.login-form-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 40px;
+  background-color: #f9f9f9;
+ 
+}
