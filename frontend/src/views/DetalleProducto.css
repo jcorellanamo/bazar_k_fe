@@ -1,65 +1,65 @@
 /* DetalleProducto.css */
 .detail-container {
-    padding-top: 80px;
-    margin-bottom: 12%; /* Aumenta el margen inferior para separar del footer */
-  }
-  
-  .detail-content {
-    display: flex;
-    flex-direction: row;
-    gap: 20px;
-    align-items: flex-start;
-  }
-  
-  .detail-left {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-  }
-  
-  .detail-left img {
-    max-width: 100%;
-  }
-  
-  .detail-right {
-    flex: 1;
-    margin-top: 80px;
-  }
-  
-  .detail-price {
-    color: white;
-    background-color: #a12fed;
-    padding: 10px;
-    border-radius: 5px;
-    margin: 10px 0;
-    font-size: 1.5em;
-    font-weight: bold;
-    display: inline-block;
-  }
-  
-  .quantity-container {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 10px;
-  }
-  
-  .quantity-controls {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-  }
-  
-  .quantity-controls button {
-    width: 30px;
-    height: 30px;
-    font-size: 16px;
-  }
-  
-  .add-cart-button {
-    color: white;
-    background-color: black;
-    border: none;
-    padding: 10px;
-  }
-  
+  padding-top: 80px;
+  margin-bottom: 12%; /* Aumenta el margen inferior para separar del footer */
+  margin-top: 3%;
+}
+
+.detail-content {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.detail-left {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.detail-left img {
+  max-width: 100%;
+}
+
+.detail-right {
+  flex: 1;
+  margin-top: 80px;
+}
+
+.detail-price {
+  color: white;
+  background-color: #a12fed;
+  padding: 10px;
+  border-radius: 5px;
+  margin: 10px 0;
+  font-size: 1.5em;
+  font-weight: bold;
+  display: inline-block;
+}
+
+.quantity-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.quantity-controls button {
+  width: 30px;
+  height: 30px;
+  font-size: 16px;
+}
+
+.add-cart-button {
+  color: white;
+  background-color: black;
+  border: none;
+  padding: 10px;
+}

@@ -33,14 +33,14 @@ const Carrito = () => {
                   className="decrementa"
                   onClick={() => eliminarCarrito(producto)} // Se mantiene para restar 1
                 >
-                  <b>- </b>
+                  <b> - </b>
                 </button>
                 {producto.count}
                 <button
                   className="incrementa"
                   onClick={() => agregarCarrito(producto, 1)} // Pasa solo 1 al incrementar
                 >
-                  <b>+ </b>
+                  <b> + </b>
                 </button>
               </div>
 
