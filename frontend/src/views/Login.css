@@ -1,4 +1,5 @@
-html, body {
+html,
+body {
   height: 100%;
   margin: 0;
   padding: 0;
@@ -7,12 +8,12 @@ html, body {
 .page-container {
   display: flex;
   flex-direction: column;
-  min-height: 100vh; 
+  min-height: 100vh;
 }
 
 .login-container {
   display: flex;
-  flex: 1; 
+  flex: 1;
 }
 
 .login-image {
@@ -33,10 +34,9 @@ html, body {
   justify-content: center;
   padding: 40px;
   background-color: #f9f9f9;
- 
 }
 
-.btn-login{
+.btn-login {
   margin-top: 15px;
   background-color: purple;
   color: #fff;

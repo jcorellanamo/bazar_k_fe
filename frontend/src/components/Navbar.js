@@ -63,7 +63,7 @@ const Navbar = () => {
       <div className="navbar-right">
         <Link to="/carrito" className="my-1 mb-0">
           <p className="mb-0 " style={{ color: "white" }}>
-            <FaShoppingCart size={30} />${totalAPagar}
+            <FaShoppingCart size={30} /> ${totalAPagar}
           </p>
         </Link>
       </div>
