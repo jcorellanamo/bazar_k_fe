@@ -13,7 +13,7 @@ const Contacto = () => {
 
         {/* Columna derecha con formulario */}
         <div className="contact-form-container">
-          <h1>Contactanos</h1>
+          <h1>Contáctanos</h1>
           <p>
             Si tienes alguna pregunta escribenos a bazark-fe@bazarkfe.cl. También puedes rellenar el siguiente formulario ¡Nos pondremos en contacto contigo lo antes posible!
           </p>

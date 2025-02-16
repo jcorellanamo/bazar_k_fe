@@ -11,32 +11,34 @@ const Login = () => {
         </div>
 
         <div className="login-form-container">
-          <h1>Login</h1>
-          <p>Login to your account in seconds</p>
+          <h1>Iniciar Sesión</h1>
+          <p>Ingresa tus datos</p>
           <form className="login-form">
             <div className="input-group">
-              <input type="email" placeholder="Email Address" required />
+              <input type="email" placeholder="Correo electrónico" required />
             </div>
             <div className="input-group">
-              <input type="password" placeholder="Password" required />
+              <input type="password" placeholder="Contraseña" required />
             </div>
             <div className="checkbox-group">
               <input type="checkbox" id="keepLoggedIn" />
               <label htmlFor="keepLoggedIn" className="terms-label">
-                Keep me logged in
+                Mantenerme conectado   
               </label>
-              <Link to="/forgot-password" className="forget-password">
-                Forgot password?
-              </Link>
             </div>
+            <Link to="/forgot-password" className="forget-password">
+                   He olvidado de contraseña
+              </Link>
+              <div>
             <button type="submit" className="btn-login">
-              Log In
+              Iniciar Sesión
             </button>
+            </div>
           </form>
           <p className="member-text">
-            Don’t have an account?{' '}
+           ¿No tienes cuenta?{' '}
             <Link to="/registrarse" className="signup-link">
-              Sign Up
+              Registrarse
             </Link>
           </p>
         </div>

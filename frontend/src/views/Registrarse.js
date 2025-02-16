@@ -14,7 +14,7 @@ const Registrarse = () => {
 
         {/* Columna derecha con formulario */}
         <div className="register-form-container">
-          <h1>Iniciar sesión</h1>
+          <h1>Crear Cuenta</h1>
           <p>Crea tu cuenta en segundos</p>
           <form className="register-form">
             <div className="input-group">
@@ -32,7 +32,7 @@ const Registrarse = () => {
             <div className="checkbox-group">
               <input type="checkbox" id="terms" required />
               <label htmlFor="terms" className="terms-label">
-                I Agree to the terms and privacy policy
+                Acepto los términos y condiciones
               </label>
             </div>
             <button type="submit" className="btn-create-account">
@@ -40,9 +40,9 @@ const Registrarse = () => {
             </button>
           </form>
           <p className="member-text">
-            Already a member?{' '}
+            Ya estás registrado?{' '}
             <Link to="/login" className="login-link">
-              Login
+              Iniciar Sesión
             </Link>
           </p>
         </div>

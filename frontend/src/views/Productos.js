@@ -53,8 +53,9 @@ const Productos = () => {
               <p className="producto-descripcion">{producto.descripcion}</p>
               <div className="producto-precio">
                 <span>{producto.precio}</span>
+                </div>
                 <button className="btn-add-to-cart">Agregar al Carrito</button>
-              </div>
+              
             </div>
           ))
         ) : (

@@ -1,6 +1,6 @@
 // src/App.js
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';  // Importa solo Routes y Route
+import { Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './views/Home';
@@ -14,6 +14,7 @@ import ArtBlog from './views/Art-Blog';
 import BlogVista1 from './views/BlogVista1';
 import BlogVista2 from './views/BlogVista2';
 import BlogVista3 from './views/BlogVista3';
+import "./App.css";
 
 function App() {
   return (

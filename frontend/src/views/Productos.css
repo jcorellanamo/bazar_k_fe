@@ -47,13 +47,18 @@
   }
   
   .producto-precio {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 10px;
-  }
-  
-  .btn-add-to-cart {
+    color: white;
+    background-color: #a12fed;
+    padding: 10px;
+    border-radius: 5px;
+    margin: 10px 0;
+    font-size: 1.5em;
+    font-weight: bold;
+    display: inline-block;
+    align-self: center; 
+}
+
+.btn-add-to-cart {
     background-color: #6f4e37;
     border: none;
     padding: 8px 12px;
@@ -61,8 +66,12 @@
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-  }
-  
+    display: inline-block;
+    align-self: center;  
+}
+
+
+
   .btn-add-to-cart:hover {
     background-color: #5a3e2e;
   }
