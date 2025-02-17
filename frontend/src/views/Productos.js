@@ -1,48 +1,29 @@
-// src/views/Productos.js
-import React, { useContext, useEffect } from "react";
-import { useNavigate } from "react-router-dom"; // Importa el hook para navegación
-import { kfeContext } from "../context/AppProvider"; // Importa el contexto
+import React, { useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { kfeContext } from "../context/AppProvider";
 import "./Productos.css";
 
 const Productos = () => {
-  const navigate = useNavigate(); // Hook para navegación
-  const { producto, setProducto } = useContext(kfeContext); // Accede al estado de productos
+  const navigate = useNavigate();
+  const { producto, cargando } = useContext(kfeContext); // Accedemos a 'producto' y 'cargando' desde el contexto
 
-  // Usamos useEffect para cargar los productos al montar el componente
-  useEffect(() => {
-    if (producto.length === 0) {
-      // Solo cargar productos si no están disponibles en el estado global
-      fetchProductos();
-    }
-  }, [producto]);
-
-  const fetchProductos = async () => {
-    try {
-      const res = await fetch("/bazarKFe_Productos.json");
-      if (!res.ok) {
-        throw new Error("No se pudo obtener los productos");
-      }
-      const productos = await res.json();
-      setProducto(productos); // Actualiza el estado con los productos obtenidos
-    } catch (error) {
-      console.error("Error al cargar los productos:", error);
-    }
-  };
-
+  // Función para navegar a la página de detalle de un producto
   const irADetalle = (id) => {
-    navigate(`/detalle/${id}`); // Redirigir al detalle del producto con el ID
+    navigate(`/detalle/${id}`);
   };
 
   return (
     <div className="productos-container">
       <h1>Café Molido</h1>
       <div className="productos-grid">
-        {producto.length > 0 ? (
+        {cargando ? (
+          <p>Cargando productos...</p> // Mostramos este mensaje mientras se cargan los productos
+        ) : (
           producto.map((producto) => (
             <div
               key={producto.id_producto}
               className="producto-card"
-              onClick={() => irADetalle(producto.id_producto)} // Al hacer clic, redirige al detalle
+              onClick={() => irADetalle(producto.id_producto)} // Navegar al detalle del producto
             >
               <img
                 src={producto.imagen}
@@ -53,13 +34,10 @@ const Productos = () => {
               <p className="producto-descripcion">{producto.descripcion}</p>
               <div className="producto-precio">
                 <span>{producto.precio}</span>
-                </div>
-                <button className="btn-add-to-cart">Agregar al Carrito</button>
-              
+              </div>
+              <button className="btn-add-to-cart">Agregar al Carrito</button>
             </div>
           ))
-        ) : (
-          <p>Cargando productos...</p>
         )}
       </div>
     </div>

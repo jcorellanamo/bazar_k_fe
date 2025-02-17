@@ -1,43 +1,47 @@
 /* frontend/src/components/Navbar.css */
 .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #6f4e37;  /* Color café */
-    padding: 10px 20px;
-  }
-  
-  .navbar-left {
-    display: flex;
-    align-items: center;
-  }
-  
-  .logo {
-    font-size: 20px;
-    font-weight: bold;
-    color: white;
-  }
-  
-  .nav-links {
-    display: flex;
-    list-style: none;
-    margin-left: 20px;
-    padding: 0;
-  }
-  
-  .nav-links li {
-    margin-right: 15px;
-    cursor: pointer;
-    color: white;
-  }
-  
-  .navbar-right {
-    color: white;
-  }
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #6f4e37; /* Color café */
+  padding: 10px 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+}
 
-  .logo-img {
-    height: 100px; 
-    width: auto;
-  }
-  
-  
+.navbar-left {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  font-size: 20px;
+  font-weight: bold;
+  color: white;
+}
+
+.nav-links {
+  display: flex;
+  list-style: none;
+  margin-left: 20px;
+  padding: 0;
+}
+
+.nav-links li {
+  margin-right: 15px;
+  cursor: pointer;
+  color: white;
+}
+
+.navbar-right {
+  color: white;
+  margin-right: 5%;
+}
+
+.logo-img {
+  height: 100px;
+  width: auto;
+}

@@ -1,98 +1,97 @@
 /* src/views/Registrarse.css */
 
 .register-container {
-    display: flex;
-    min-height: calc(100vh - 60px); /* Ajusta según la altura del Navbar */
-  }
-  
-  .register-image {
-    flex: 1;
-  }
-  
-  .register-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  
-  .register-form-container {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 40px;
-    background-color: #f9f9f9;
-  }
-  
-  .register-form-container h1 {
-    margin-bottom: 10px;
-    font-size: 2rem;
-    color: #333;
-  }
-  
-  .register-form-container p {
-    margin-bottom: 20px;
-    color: #666;
-    font-size: 1rem;
-  }
-  
-  .register-form {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .input-group {
-    margin-bottom: 15px;
-  }
-  
-  .input-group input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 1rem;
-  }
-  
-  .checkbox-group {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-  }
-  
-  .checkbox-group input[type="checkbox"] {
-    margin-right: 10px;
-  }
-  
-  .terms-label {
-    color: purple;
-    font-size: 0.9rem;
-  }
-  
-  .btn-create-account {
-    background-color: purple;
-    color: #fff;
-    border: none;
-    padding: 12px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 1rem;
-    margin-bottom: 15px;
-    transition: background-color 0.3s ease;
-  }
-  
-  .btn-create-account:hover {
-    background-color: #5a007a;
-  }
-  
-  .member-text {
-    text-align: center;
-    font-size: 0.9rem;
-    color: #333;
-  }
-  
-  .login-link {
-    color: blue;
-    text-decoration: underline;
-    cursor: pointer;
-  }
-  
+  display: flex;
+  min-height: calc(100vh - 60px); /* Ajusta según la altura del Navbar */
+}
+
+.register-image {
+  flex: 1;
+}
+
+.register-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.register-form-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 40px;
+  background-color: #f9f9f9;
+}
+
+.register-form-container h1 {
+  margin-bottom: 10px;
+  font-size: 2rem;
+  color: #333;
+}
+
+.register-form-container p {
+  margin-bottom: 20px;
+  color: #666;
+  font-size: 1rem;
+}
+
+.register-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-group {
+  margin-bottom: 15px;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.checkbox-group input[type="checkbox"] {
+  margin-right: 10px;
+}
+
+.terms-label {
+  color: purple;
+  font-size: 0.9rem;
+}
+
+.btn-create-account {
+  background-color: purple;
+  color: #fff;
+  border: none;
+  padding: 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-bottom: 15px;
+  transition: background-color 0.3s ease;
+}
+
+.btn-create-account:hover {
+  background-color: #5a007a;
+}
+
+.member-text {
+  text-align: center;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.login-link {
+  color: blue;
+  text-decoration: underline;
+  cursor: pointer;
+}
