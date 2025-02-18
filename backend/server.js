@@ -26,9 +26,9 @@ const PORT = process.env.PORT_SERVER || 3000;
 // Middlewares
 app.use(cors()); // Permite que nuestra API sea accesible desde diferentes orígenes
 app.use(morgan("dev")); // Registra las solicitudes en la consola para facilitar el desarrollo
-app.use(helmet());
+app.use(helmet()); // Ayuda a proteger nuestra app contra algunas vulnerabilidades comunes en las aplicaciones web.
 app.use(express.json()); // Permite que nuestra aplicación entienda el formato JSON en las solicitudes
-app.use(cookieParser());
+app.use(cookieParser()); // Permite que nuestra aplicación lea las cookies enviadas en las solicitudes.
 
 const verifyToken = (req, res, next) => {
   const token = req.headers.authorization?.split(" ")[1]; // Extraer el token del formato 'Bearer <token>'
@@ -85,9 +85,6 @@ app.post(
     iniciarSesion(req, res, next);
   }
 );
-
-// RUTAS PARA CERRAR SESIÓN  --------------------------
-app.post("/logout", cerrarSesion);
 
 // RUTA PARA PRODUCTOS
 // obtención de productos
