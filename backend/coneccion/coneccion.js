@@ -7,8 +7,8 @@ const pool = new Pool({
   //configuración de la conexión, se crea una instancia de Pool con la configuración necesaria para conectarse a la base de datos PostgreSQL.
   host: HOST || "localhost",
   database: DATABASE || "bazarkfe",
-  user: USER || "xx", //reemplaza por tu usuario,
-  password: PASSWORD || "xx", //ingresa tu clave
+  user: USER || "postgres", //reemplaza por tu usuario,
+  password: PASSWORD || "juan2013", //ingresa tu clave
   port: PORT || 5432,
   allowExitOnIdle: true, // permite que la aplicación se cierre incluso si hay conexiones inactivas en el pool.
 });
