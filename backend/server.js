@@ -10,6 +10,8 @@ const { body, validationResult, param } = require("express-validator");
 // Importamos funciones necesarias para las rutas
 const getProductos = require("./consultas/getProductos");
 const getProductoById = require("./consultas/getProductoById");
+const { insertarProducto } = require("./consultas/insertarProducto");
+
 const obtenerDatosPersonales = require("./consultas/obtenerDatosPersonales");
 const cambiarDatosPersonales = require("./consultas/cambiarDatosPersonales");
 const obtenerVentas = require("./consultas/obtenerVentas");
@@ -17,6 +19,7 @@ const {
   registrarUsuario,
   verificarCorreoExistente,
 } = require("./consultas/registrarUsuario");
+const getUsuarioById = require("./consultas/getUsuarioById");
 const iniciarSesion = require("./consultas/iniciarSesion");
 
 require("dotenv").config();
@@ -92,6 +95,29 @@ app.post(
   }
 );
 
+//RUTA USUARIO ID
+app.put("/usuarios/:id", async (req, res) => {
+  const { id } = req.params;
+  const { nombre, apellido, telefono, email } = req.body;
+
+  try {
+    const datosActualizados = await getUsuarioById({
+      id_usuario: id,
+      nombre,
+      apellido,
+      telefono,
+      email,
+    });
+    res.status(200).json({
+      message: "Datos actualizados con éxito",
+      usuario: datosActualizados,
+    });
+  } catch (error) {
+    console.error("Error al actualizar datos:", error.message);
+    res.status(500).json({ error: "No se pudo actualizar los datos." });
+  }
+});
+
 // RUTA LOGIN PARA USUARIOS
 app.post(
   "/login",
@@ -141,6 +167,43 @@ app.get(
     }
   }
 );
+
+// RUTA PARA INSERTAR UN NUEVO PRODUCTO
+app.post("/productos", async (req, res) => {
+  const {
+    nombre,
+    descripcion,
+    precio,
+    stock,
+    imagen,
+    id_categoria,
+    intensidad,
+    origen,
+  } = req.body;
+
+  try {
+    // Intentar insertar el producto
+    const nuevoProducto = await insertarProducto(
+      nombre,
+      descripcion,
+      precio,
+      stock,
+      imagen,
+      id_categoria,
+      intensidad,
+      origen
+    );
+
+    // Si todo va bien, enviar respuesta de éxito
+    res.status(201).json({
+      message: "Producto insertado con éxito",
+      producto: nuevoProducto,
+    });
+  } catch (error) {
+    console.error("Error al insertar producto:", error.message);
+    res.status(400).json({ error: error.message }); // Retornar el error de la verificación
+  }
+});
 
 // RUTA PARA OBTENER DATOS PERSONALES
 app.get("/datospersonales", verifyToken, async (req, res) => {
