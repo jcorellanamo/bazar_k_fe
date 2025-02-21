@@ -13,10 +13,11 @@ const getProductoById = require("./consultas/getProductoById");
 const obtenerDatosPersonales = require("./consultas/obtenerDatosPersonales");
 const cambiarDatosPersonales = require("./consultas/cambiarDatosPersonales");
 const obtenerVentas = require("./consultas/obtenerVentas");
-const registrarUsuario = require("./consultas/registrarUsuario");
+const {
+  registrarUsuario,
+  verificarCorreoExistente,
+} = require("./consultas/registrarUsuario");
 const iniciarSesion = require("./consultas/iniciarSesion");
-
-
 
 require("dotenv").config();
 
@@ -34,7 +35,9 @@ app.use(cookieParser());
 const verifyToken = (req, res, next) => {
   const token = req.headers.authorization?.split(" ")[1];
   if (!token) {
-    return res.status(403).json({ message: "Acceso denegado, no hay token de autenticación." });
+    return res
+      .status(403)
+      .json({ message: "Acceso denegado, no hay token de autenticación." });
   }
   try {
     const decoded = jwt.verify(token, process.env.SECRET_JWT_KEY);
@@ -47,11 +50,10 @@ const verifyToken = (req, res, next) => {
 
 // Ruta de bienvenida
 app.get("/", (req, res) => {
-  res.json({ mensaje: "¡Bienvenidos! Esperamos que disfrutes tu experiencia." });
+  res.json({
+    mensaje: "¡Bienvenidos! Esperamos que disfrutes tu experiencia.",
+  });
 });
-
-
-
 
 // RUTA PARA REGISTRO DE NUEVOS USUARIOS
 app.post(
@@ -68,7 +70,19 @@ app.post(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
+
+    const { email } = req.body;
+
     try {
+      // Verificar si el correo ya está registrado
+      const usuarioExistente = await verificarCorreoExistente(email);
+      if (usuarioExistente) {
+        return res
+          .status(400)
+          .json({ error: "El correo electrónico ya está registrado" });
+      }
+
+      // Si el correo no está registrado, proceder con el registro
       await registrarUsuario(req.body);
       res.status(201).json({ message: "Usuario registrado con éxito" });
     } catch (error) {
@@ -81,10 +95,7 @@ app.post(
 // RUTA LOGIN PARA USUARIOS
 app.post(
   "/login",
-  [
-    body("email").isEmail(),
-    body("password").isString().isLength({ min: 6 }),
-  ],
+  [body("email").isEmail(), body("password").isString().isLength({ min: 6 })],
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -147,14 +158,15 @@ app.get("/datospersonales", verifyToken, async (req, res) => {
 // RUTA PARA MODIFICAR DATOS PERSONALES
 app.put("/datospersonales", verifyToken, async (req, res) => {
   try {
-    await cambiarDatosPersonales({ id_usuario: req.user.id_usuario, ...req.body });
+    await cambiarDatosPersonales({
+      id_usuario: req.user.id_usuario,
+      ...req.body,
+    });
     res.status(204).send();
   } catch (error) {
     res.status(500).json({ error: "No se pudo actualizar la información" });
   }
 });
-
-
 
 // RUTA PARA OBTENER VENTAS / PEDIDOS
 app.get("/ventas", async (req, res) => {
