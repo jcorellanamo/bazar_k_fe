@@ -5,8 +5,8 @@ const { pool } = require("../coneccion/coneccion"); // Asegúrate de que la cone
 // Verificar si el producto ya existe en la base de datos
 async function verificarProductoExistente(nombre) {
   const consulta = `
-    SELECT * FROM productos WHERE nombre = $1;
-  `;
+      SELECT * FROM productos WHERE nombre = $1;
+    `;
   try {
     const { rows } = await pool.query(consulta, [nombre]);
     return rows.length > 0; // Si hay filas, significa que el producto ya existe
@@ -38,9 +38,9 @@ async function insertarProducto(
 
     // Si el producto no está registrado, proceder con el registro
     const query = `
-      INSERT INTO productos (nombre, descripcion, precio, stock, imagen, id_categoria, intensidad, origen)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *;
-    `;
+        INSERT INTO productos (nombre, descripcion, precio, stock, imagen, id_categoria, intensidad, origen)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *;
+      `;
 
     const values = [
       nombre,
@@ -74,11 +74,11 @@ async function modificarProducto(
   origen
 ) {
   const consulta = `
-    UPDATE productos
-    SET nombre = $1, descripcion = $2, precio = $3, stock = $4, imagen = $5, id_categoria = $6, intensidad = $7, origen = $8
-    WHERE id_producto = $9
-    RETURNING *;
-  `;
+      UPDATE productos
+      SET nombre = $1, descripcion = $2, precio = $3, stock = $4, imagen = $5, id_categoria = $6, intensidad = $7, origen = $8
+      WHERE id_producto = $9
+      RETURNING *;
+    `;
 
   const valores = [
     nombre,
@@ -113,8 +113,8 @@ async function modificarProducto(
 // Eliminar producto
 async function eliminarProducto(id) {
   const consulta = `
-    DELETE FROM productos WHERE id_producto = $1 RETURNING *;
-  `;
+      DELETE FROM productos WHERE id_producto = $1 RETURNING *;
+    `;
 
   try {
     const { rows } = await pool.query(consulta, [id]);
@@ -133,8 +133,8 @@ async function eliminarProducto(id) {
 // Verificar si el correo ya está registrado
 async function verificarCorreoExistente(email) {
   const consulta = `
-    SELECT * FROM usuarios WHERE email = $1;
-  `;
+      SELECT * FROM usuarios WHERE email = $1;
+    `;
   try {
     const { rows } = await pool.query(consulta, [email]);
     return rows.length > 0; // Si hay filas, significa que el correo ya existe
@@ -163,9 +163,9 @@ async function registrarUsuario() {
 
     // Si el correo no está registrado, proceder con el registro
     const query = `
-      INSERT INTO usuarios (nombre, apellido, email, contraseña, telefono)
-      VALUES ($1, $2, $3, $4, $5) RETURNING *;
-    `;
+        INSERT INTO usuarios (nombre, apellido, email, contraseña, telefono)
+        VALUES ($1, $2, $3, $4, $5) RETURNING *;
+      `;
 
     const values = [nombre, apellido, email, password, telefono];
     const res = await pool.query(query, values);
@@ -217,11 +217,20 @@ async function testLogin() {
 
 async function test() {
   console.log("🔹 Probando insertar producto...");
-  await insertarProducto(); // Probar si el producto ya existe
+  await insertarProducto(
+    "Test Café",
+    "Café de sabor intenso",
+    14990,
+    20,
+    "nueva_imagen.jpg",
+    1,
+    "Suave",
+    "Brasil"
+  ); // Probar si el producto ya existe
 
   console.log("🔹 Probando modificar producto...");
   await modificarProducto(
-    5, // ID del producto a modificar
+    3, // ID del producto a modificar
     "Café Expresso",
     "Café de sabor intenso",
     14990,
@@ -230,10 +239,10 @@ async function test() {
     1,
     "Suave",
     "Brasil"
-  ); // Modificar el producto con ID 5
+  ); // Modificar el producto con ID 3
 
   console.log("🔹 Probando eliminar producto...");
-  await eliminarProducto(5); // Eliminar el producto con ID 5
+  await eliminarProducto(3); // Eliminar el producto con ID 3
 
   console.log("🔹 Probando registrar usuario...");
   await registrarUsuario(); // Probar si el correo ya está registrado
