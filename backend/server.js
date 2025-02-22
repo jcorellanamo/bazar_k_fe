@@ -1,41 +1,46 @@
 // Importamos las dependencias necesarias para nuestra aplicación
-
 const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const helmet = require("helmet");
 const jwt = require("jsonwebtoken");
-const { body, validationResult } = require("express-validator");
+const { body, validationResult, param } = require("express-validator");
 
-//importamos funciones necesarias para las rutas
+// Importamos funciones necesarias para las rutas
+const getProductos = require("./consultas/getProductos");
+const getProductoById = require("./consultas/getProductoById");
+const { insertarProducto } = require("./consultas/insertarProducto");
+
+const obtenerDatosPersonales = require("./consultas/obtenerDatosPersonales");
+const cambiarDatosPersonales = require("./consultas/cambiarDatosPersonales");
+const obtenerVentas = require("./consultas/obtenerVentas");
 const {
-  obtenerDatosPersonales,
-  obtenerVentas,
-  cambiarDatosPersonales,
-  getProductos,
-  getProductoById,
-} = require("./consultas/consultas.js");
+  registrarUsuario,
+  verificarCorreoExistente,
+} = require("./consultas/registrarUsuario");
+const getUsuarioById = require("./consultas/getUsuarioById");
+const iniciarSesion = require("./consultas/iniciarSesion");
 
-require("dotenv").config(); // Cargamos las variables de entorno desde el archivo .env
+require("dotenv").config();
 
-// Creamos una instancia de Express
 const app = express();
 const PORT = process.env.PORT_SERVER || 3000;
 
 // Middlewares
-app.use(cors()); // Permite que nuestra API sea accesible desde diferentes orígenes
-app.use(morgan("dev")); // Registra las solicitudes en la consola para facilitar el desarrollo
-app.use(helmet()); // Ayuda a proteger nuestra app contra algunas vulnerabilidades comunes en las aplicaciones web.
-app.use(express.json()); // Permite que nuestra aplicación entienda el formato JSON en las solicitudes
-app.use(cookieParser()); // Permite que nuestra aplicación lea las cookies enviadas en las solicitudes.
+app.use(cors());
+app.use(morgan("dev"));
+app.use(helmet());
+app.use(express.json());
+app.use(cookieParser());
 
+// Middleware para verificar el token
 const verifyToken = (req, res, next) => {
-  const token = req.headers.authorization?.split(" ")[1]; // Extraer el token del formato 'Bearer <token>'
+  const token = req.headers.authorization?.split(" ")[1];
   if (!token) {
     return res
       .status(403)
-      .json({ message: "Acceso denegado, no hay token de autentificación." });
+      .json({ message: "Acceso denegado, no hay token de autenticación." });
   }
   try {
     const decoded = jwt.verify(token, process.env.SECRET_JWT_KEY);
@@ -46,119 +51,202 @@ const verifyToken = (req, res, next) => {
   }
 };
 
-// DEFINIMOS NUESTRAS RUTAS ----------------------
-
-// Añadimos una ruta adicional para mostrar un saludo
+// Ruta de bienvenida
 app.get("/", (req, res) => {
   res.json({
     mensaje: "¡Bienvenidos! Esperamos que disfrutes tu experiencia.",
   });
 });
 
-// RUTA POST PARA REGISTRO DE NUEVOS USUARIOS --------------------------
+// RUTA PARA REGISTRO DE NUEVOS USUARIOS
 app.post(
   "/registro",
-  body("nombre").isString().notEmpty(),
-  body("apellido").isString().notEmpty(),
-  body("email").isEmail(),
-  body("telefono").isString().notEmpty(),
-  body("password").isString().isLength({ min: 6 }),
-  (req, res, next) => {
+  [
+    body("nombre").isString().notEmpty(),
+    body("apellido").isString().notEmpty(),
+    body("email").isEmail(),
+    body("telefono").isString().notEmpty(),
+    body("password").isString().isLength({ min: 6 }),
+  ],
+  async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    registrarUsuario(req, res, next);
+
+    const { email } = req.body;
+
+    try {
+      // Verificar si el correo ya está registrado
+      const usuarioExistente = await verificarCorreoExistente(email);
+      if (usuarioExistente) {
+        return res
+          .status(400)
+          .json({ error: "El correo electrónico ya está registrado" });
+      }
+
+      // Si el correo no está registrado, proceder con el registro
+      await registrarUsuario(req.body);
+      res.status(201).json({ message: "Usuario registrado con éxito" });
+    } catch (error) {
+      console.error("Error al registrar usuario:", error.message);
+      res.status(500).json({ error: "Error en el registro" });
+    }
   }
 );
 
-//RUTA LOGIN PARA INGRESO DE USUARIOS YA REGISTRADOS --------------------------
+//RUTA USUARIO ID
+app.put("/usuarios/:id", async (req, res) => {
+  const { id } = req.params;
+  const { nombre, apellido, telefono, email } = req.body;
+
+  try {
+    const datosActualizados = await getUsuarioById({
+      id_usuario: id,
+      nombre,
+      apellido,
+      telefono,
+      email,
+    });
+    res.status(200).json({
+      message: "Datos actualizados con éxito",
+      usuario: datosActualizados,
+    });
+  } catch (error) {
+    console.error("Error al actualizar datos:", error.message);
+    res.status(500).json({ error: "No se pudo actualizar los datos." });
+  }
+});
+
+// RUTA LOGIN PARA USUARIOS
 app.post(
   "/login",
-  body("email").isString().notEmpty(),
-  body("password").isString().isLength({ min: 6 }),
-  (req, res, next) => {
+  [body("email").isEmail(), body("password").isString().isLength({ min: 6 })],
+  async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    iniciarSesion(req, res, next);
+    try {
+      const token = await iniciarSesion(req.body);
+      res.status(200).json({ token });
+    } catch (error) {
+      console.error("Error en el inicio de sesión:", error.message);
+      res.status(401).json({ error: "Credenciales incorrectas" });
+    }
   }
 );
 
 // RUTA PARA PRODUCTOS
-// obtención de productos
 app.get("/productos", async (req, res) => {
   try {
     const productos = await getProductos();
     res.json(productos);
   } catch (error) {
-    res.status(error.code || 500).send(error);
+    res.status(500).json({ error: "Error al obtener productos" });
   }
 });
 
-// obtención de productos por id
-app.get("/productos/:id", async (req, res) => {
-  try {
-    const { id_producto } = req.params;
-    const producto = await getProductoById(id_produto);
-    res.json(producto);
-  } catch (error) {
-    res
-      .status(error.code || 500)
-      .send(error.message || "Error interno del servidor");
-  }
-});
-
-// obtener datos personales del usuario por ID
-app.get("/datospersonales", verifyToken, async (req, res) => {
-  const id_usuario = req.user.id; // ID extraído del token
-
-  try {
-    const datosPersonales = await obtenerDatosPersonales(id_usuario);
-    if (datosPersonales) {
-      res.status(200).json(datosPersonales);
-    } else {
-      res.status(404).json({ error: "Usuario no encontrado" });
+// RUTA PARA PRODUCTO POR ID
+app.get(
+  "/productos/:id",
+  param("id").isInt().withMessage("El ID debe ser un número entero"),
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
     }
-  } catch (error) {
-    console.error("Error al obtener los datos personales:", error);
-    res.status(500).json({ error: "Error al obtener los datos personales" });
+    try {
+      const producto = await getProductoById(req.params.id);
+      if (!producto) {
+        return res.status(404).json({ error: "Producto no encontrado" });
+      }
+      res.json(producto);
+    } catch (error) {
+      res.status(500).json({ error: "Error al obtener el producto" });
+    }
   }
-});
+);
 
-// MODIFICAR DATOS DE USUARIO
-app.put("/datospersonales", verifyToken, async (req, res) => {
-  const datosActualizados = req.body; // Datos enviados desde el frontend
-  // console.log("id que llega mas datos en la ruta:" ,  datosActualizados )
+// RUTA PARA INSERTAR UN NUEVO PRODUCTO
+app.post("/productos", async (req, res) => {
+  const {
+    nombre,
+    descripcion,
+    precio,
+    stock,
+    imagen,
+    id_categoria,
+    intensidad,
+    origen,
+  } = req.body;
+
   try {
-    const resultado = await cambiarDatosPersonales(datosActualizados);
-    res.status(200).json(resultado); // Responder con los datos actualizados
+    // Intentar insertar el producto
+    const nuevoProducto = await insertarProducto(
+      nombre,
+      descripcion,
+      precio,
+      stock,
+      imagen,
+      id_categoria,
+      intensidad,
+      origen
+    );
+
+    // Si todo va bien, enviar respuesta de éxito
+    res.status(201).json({
+      message: "Producto insertado con éxito",
+      producto: nuevoProducto,
+    });
   } catch (error) {
-    console.error("Error al actualizar los datos personales:", error);
-    res.status(500).json({ error: "No se pudo actualizar la información." });
+    console.error("Error al insertar producto:", error.message);
+    res.status(400).json({ error: error.message }); // Retornar el error de la verificación
   }
 });
 
-// RUTA PARA OBTENER VENTAS / PEDIDOS Y QUE SE ENLISTEN
+// RUTA PARA OBTENER DATOS PERSONALES
+app.get("/datospersonales", verifyToken, async (req, res) => {
+  try {
+    const datosPersonales = await obtenerDatosPersonales(req.user.id_usuario);
+    if (!datosPersonales) {
+      return res.status(404).json({ error: "Usuario no encontrado" });
+    }
+    res.json(datosPersonales);
+  } catch (error) {
+    res.status(500).json({ error: "Error al obtener datos personales" });
+  }
+});
+
+// RUTA PARA MODIFICAR DATOS PERSONALES
+app.put("/datospersonales", verifyToken, async (req, res) => {
+  try {
+    await cambiarDatosPersonales({
+      id_usuario: req.user.id_usuario,
+      ...req.body,
+    });
+    res.status(204).send();
+  } catch (error) {
+    res.status(500).json({ error: "No se pudo actualizar la información" });
+  }
+});
+
+// RUTA PARA OBTENER VENTAS / PEDIDOS
 app.get("/ventas", async (req, res) => {
   try {
-    const getVentas = await obtenerVentas();
-    res.json({ getVentas });
+    const ventas = await obtenerVentas();
+    res.json(ventas);
   } catch (error) {
-    console.error("Error al obtener lista de ventas:", error);
     res.status(500).json({ error: "Error al obtener ventas" });
   }
 });
 
-// Manejo de errores 404
-app.use((req, res, next) => {
-  res.status(404).json({
-    error: "Lo sentimos, recurso no encontrado. ¡Intenta otra vez!",
-    error,
-  });
+// MANEJO DE ERRORES 404
+app.use((req, res) => {
+  res.status(404).json({ error: "Recurso no encontrado" });
 });
 
+// INICIAR SERVIDOR
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en el puerto ${PORT}`);
 });
