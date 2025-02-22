@@ -1,41 +1,49 @@
-require("dotenv").config();
-const iniciarSesion = require("../consultas/iniciarSesion");
+const { pool } = require("../coneccion/coneccion");
 
-async function testLogin() {
-  const datosCorrectos = {
-    email: "ana@example.com", // Asegúrate de que este usuario existe en la BD
-    password: "123456",
-  };
-
-  const datosIncorrectos = {
-    email: "ana@example.com",
-    password: "wrongpassword",
-  };
-
-  const usuarioNoExistente = {
-    email: "noexiste@example.com",
-    password: "123456",
-  };
-
+async function verificarCorreoExistente(email) {
+  const consulta = `
+    SELECT * FROM usuarios WHERE email = $1;
+  `;
   try {
-    console.log("🔹 Probando inicio de sesión con credenciales correctas...");
-    const token = await iniciarSesion(datosCorrectos);
-    console.log("✅ Inicio de sesión exitoso. Token generado:", token);
-
-    console.log("🔹 Probando inicio de sesión con contraseña incorrecta...");
-    await iniciarSesion(datosIncorrectos);
+    const { rows } = await pool.query(consulta, [email]);
+    return rows.length > 0; // Si hay filas, significa que el correo ya existe
   } catch (error) {
-    console.error("❌ Error esperado:", error.message);
-  }
-
-  try {
-    console.log("🔹 Probando inicio de sesión con usuario no existente...");
-    await iniciarSesion(usuarioNoExistente);
-  } catch (error) {
-    console.error("❌ Error esperado:", error.message);
+    console.error("Error al verificar correo:", error);
+    throw error;
   }
 }
 
-testLogin();
+async function registrarUsuario() {
+  const nombre = "Ana";
+  const apellido = "Gómez";
+  const email = "ana@example.com";
+  const password = "123456";
+  const telefono = "987654321";
 
+  try {
+    // Verificar si el correo ya está registrado
+    const correoExistente = await verificarCorreoExistente(email);
 
+    if (correoExistente) {
+      console.log("❌ El correo ya está registrado.");
+      return; // Abortamos el registro si el correo ya está en uso
+    }
+
+    // Si el correo no está registrado, proceder con el registro del usuario
+    const query = `
+      INSERT INTO usuarios (nombre, apellido, email, contraseña, telefono)
+      VALUES ($1, $2, $3, $4, $5) RETURNING *;
+    `;
+
+    const values = [nombre, apellido, email, password, telefono];
+    const res = await pool.query(query, values);
+
+    console.log("✅ Usuario registrado con éxito:", res.rows[0]);
+  } catch (error) {
+    console.error("❌ Error al registrar usuario:", error);
+  } finally {
+    pool.end();
+  }
+}
+
+registrarUsuario();
