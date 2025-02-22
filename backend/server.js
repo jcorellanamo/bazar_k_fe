@@ -11,7 +11,8 @@ const { body, validationResult, param } = require("express-validator");
 const getProductos = require("./consultas/getProductos");
 const getProductoById = require("./consultas/getProductoById");
 const { insertarProducto } = require("./consultas/insertarProducto");
-
+const eliminarProducto = require("./consultas/eliminarProducto");
+const modificarProducto = require("./consultas/modificarProducto");
 const obtenerDatosPersonales = require("./consultas/obtenerDatosPersonales");
 const cambiarDatosPersonales = require("./consultas/cambiarDatosPersonales");
 const obtenerVentas = require("./consultas/obtenerVentas");
@@ -202,6 +203,66 @@ app.post("/productos", async (req, res) => {
   } catch (error) {
     console.error("Error al insertar producto:", error.message);
     res.status(400).json({ error: error.message }); // Retornar el error de la verificación
+  }
+});
+// RUTA PARA ELIMINAR UN PRODUCTO
+app.delete("/productos/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    // Llamar a una función que elimine el producto (deberás crear esta función en tu archivo de consultas)
+    const productoEliminado = await eliminarProducto(id);
+
+    if (!productoEliminado) {
+      return res.status(404).json({ error: "Producto no encontrado" });
+    }
+
+    res.status(200).json({ message: "Producto eliminado con éxito" });
+  } catch (error) {
+    console.error("Error al eliminar producto:", error.message);
+    res.status(500).json({ error: "Error al eliminar el producto" });
+  }
+});
+
+// RUTA PARA MODIFICAR UN PRODUCTO
+app.put("/productos/:id", async (req, res) => {
+  const { id } = req.params;
+  const {
+    nombre,
+    descripcion,
+    precio,
+    stock,
+    imagen,
+    id_categoria,
+    intensidad,
+    origen,
+  } = req.body;
+
+  try {
+    // Llamar a una función que modifique el producto (deberás crear esta función en tu archivo de consultas)
+    const productoModificado = await modificarProducto(
+      id,
+      nombre,
+      descripcion,
+      precio,
+      stock,
+      imagen,
+      id_categoria,
+      intensidad,
+      origen
+    );
+
+    if (!productoModificado) {
+      return res.status(404).json({ error: "Producto no encontrado" });
+    }
+
+    res.status(200).json({
+      message: "Producto modificado con éxito",
+      producto: productoModificado,
+    });
+  } catch (error) {
+    console.error("Error al modificar producto:", error.message);
+    res.status(500).json({ error: "Error al modificar el producto" });
   }
 });
 
