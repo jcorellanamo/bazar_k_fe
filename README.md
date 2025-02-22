@@ -28,3 +28,19 @@ El proyecto se ha desarrollado utilizando las siguientes tecnologías:
 - **Backend:** [Node.js con Express] 
 - **Base de Datos:** PostgreSQL
 - **Control de Versiones:** Git y GitHub
+
+## Instalación del Backend
+Para ejecutar este proyecto en tu máquina local, sigue estos pasos:
+
+1- **Clona el repositorio**
+
+git clone https://github.com/jcorellanamo/bazar_k_fe
+cd bazar_k_fe/backend
+Instala las dependencias:
+
+2- **npm install**
+Crea un archivo .env en la raíz del proyecto y configura las variables necesarias, como la conexión a la base de datos y la clave secreta para JWT.
+
+3- **Inicia el servidor**
+
+node server.js
