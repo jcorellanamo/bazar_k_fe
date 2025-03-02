@@ -9,40 +9,40 @@ const Registrarse = () => {
       <div className="register-container">
         {/* Columna izquierda con imagen */}
         <div className="register-image">
-          <img src="/images/register-image.jpg" alt="Register" />
+          <img src="/images/registrarse.jpg" alt="Register-img" />
         </div>
 
         {/* Columna derecha con formulario */}
         <div className="register-form-container">
-          <h1>Sign In</h1>
-          <p>Create your account in a seconds</p>
+          <h1>Crear Cuenta</h1>
+          <p>Crea tu cuenta en segundos</p>
           <form className="register-form">
             <div className="input-group">
-              <input type="text" placeholder="First Name" required />
+              <input type="text" placeholder="Nombre" required />
             </div>
             <div className="input-group">
-              <input type="text" placeholder="Last Name" required />
+              <input type="text" placeholder="Apellidos" required />
             </div>
             <div className="input-group">
-              <input type="email" placeholder="Email Address" required />
+              <input type="email" placeholder="Dirección correo electrónico" required />
             </div>
             <div className="input-group">
-              <input type="password" placeholder="Create Password" required />
+              <input type="password" placeholder="Crear contraseña" required />
             </div>
             <div className="checkbox-group">
               <input type="checkbox" id="terms" required />
               <label htmlFor="terms" className="terms-label">
-                I Agree to the terms and privacy policy
+                Acepto los términos y condiciones
               </label>
             </div>
             <button type="submit" className="btn-create-account">
-              Create Account
+              Crear cuenta
             </button>
           </form>
           <p className="member-text">
-            Already a member?{' '}
+            Ya estás registrado?{' '}
             <Link to="/login" className="login-link">
-              Login
+              Iniciar Sesión
             </Link>
           </p>
         </div>

@@ -8,12 +8,12 @@ const Contacto = () => {
       <div className="contact-container">
         {/* Columna izquierda con imagen */}
         <div className="contact-image">
-          <img src="/images/contact-image.jpg" alt="Contacto" />
+          <img src="/images/contacto.jpg" alt="Contacto" />
         </div>
 
         {/* Columna derecha con formulario */}
         <div className="contact-form-container">
-          <h1>Contactanos</h1>
+          <h1>Contáctanos</h1>
           <p>
             Si tienes alguna pregunta escribenos a bazark-fe@bazarkfe.cl. También puedes rellenar el siguiente formulario ¡Nos pondremos en contacto contigo lo antes posible!
           </p>

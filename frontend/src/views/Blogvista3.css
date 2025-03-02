@@ -1,0 +1,50 @@
+@import url("https://fonts.googleapis.com/css2?family=Jomhuria&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+
+body {
+  font-family: "Roboto", sans-serif;
+}
+
+.erica-one-regular {
+  font-family: "Erica One", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.blog-container {
+  margin-left: 100px;
+  margin-right: 100px;
+}
+
+.blog-header {
+  font-size: 10rem;
+  background-color: rgba(128, 128, 128, 0.5); /* Gris transparente */
+  color: black;
+  text-align: center;
+  padding: 20px;
+  font-family: "Luckiest Guy", serif;
+  font-style: italic;
+  font-weight: 400;
+}
+
+.blog-text-3 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 40px; /* Mayor separación entre elementos */
+  padding: 20px;
+  justify-content: space-between;
+  margin-left: 10%;
+  margin-right: 10%;
+
+}
+
+.blog-text-column {
+  background-color: rgba(128, 128, 128, 0.5); /* Mismo gris transparente */
+}
+
+.blog-image {
+  width: 50%;
+  height: 500px;
+  object-fit: contain;
+  margin-top: 50px;
+}
