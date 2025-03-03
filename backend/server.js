@@ -11,7 +11,7 @@ const { body, validationResult, param } = require("express-validator");
 const getProductos = require("./consultas/getProductos");
 const getProductoById = require("./consultas/getProductoById");
 const { insertarProducto } = require("./consultas/insertarProducto");
-
+const mensajeContacto = require("./consultas/mensajeContacto");
 const obtenerDatosPersonales = require("./consultas/obtenerDatosPersonales");
 const cambiarDatosPersonales = require("./consultas/cambiarDatosPersonales");
 const obtenerVentas = require("./consultas/obtenerVentas");
@@ -25,7 +25,7 @@ const iniciarSesion = require("./consultas/iniciarSesion");
 require("dotenv").config();
 
 const app = express();
-const PORT = process.env.PORT_SERVER || 3000;
+const PORT = process.env.PORT_SERVER || 5000;
 
 // Middlewares
 app.use(cors());
@@ -238,6 +238,24 @@ app.get("/ventas", async (req, res) => {
     res.json(ventas);
   } catch (error) {
     res.status(500).json({ error: "Error al obtener ventas" });
+  }
+});
+
+app.post("/contacto", async (req, res) => {
+  const { nombre, email, mensaje } = req.body;
+
+  try {
+    // Llamamos a la función para insertar el mensaje en la base de datos
+    const resultado = await mensajeContacto(nombre, email, mensaje);
+
+    // Respuesta exitosa
+    res.status(200).json({
+      mensaje: "Mensaje recibido, nos pondremos en contacto contigo pronto.",
+      contacto: resultado, // Aquí puedes devolver el contacto insertado si lo necesitas
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Hubo un problema al enviar el mensaje." });
   }
 });
 

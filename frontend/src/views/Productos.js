@@ -1,5 +1,5 @@
 // src/views/Productos.js
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom"; // Importa el hook para navegación
 import { kfeContext } from "../context/AppProvider"; // Importa el contexto
 import "./Productos.css";
