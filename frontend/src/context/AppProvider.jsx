@@ -10,6 +10,31 @@ const AppProvider = ({ children }) => {
   const [totalAPagar, setTotalAPagar] = useState(0);
   const [actualizarTotal, setActualizarTotal] = useState(false);
 
+  // Estado del formulario de registro
+  const [userData, setUserData] = useState({
+    nombre: '',
+    apellidos: '',
+    email: '',
+    contraseña: '',
+    aceptoTerminos: false,
+  });
+
+  // Función para actualizar los datos del formulario
+  const actualizarUserData = (field, value) => {
+    setUserData((prevData) => ({
+      ...prevData,
+      [field]: value,
+    }));
+  };
+
+  // Función para manejar el envío del formulario
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    // Aquí podrías manejar el envío del formulario, por ejemplo, hacer una llamada a una API.
+    Swal.fire('¡Cuenta creada!', 'Tu cuenta fue creada con éxito.', 'success');
+  };
+
+  // Lógica para cargar productos
   useEffect(() => {
     getProductos();
   }, []);
@@ -25,13 +50,13 @@ const AppProvider = ({ children }) => {
     }
   };
 
+  // Lógica para agregar al carrito
   const agregarCarrito = (producto, cantidad) => {
     const productoExistente = carrito.find(
       (prod) => prod.id_producto === producto.id_producto
     );
 
     if (productoExistente) {
-      // Si el producto ya está en el carrito, solo sumamos 1 a la cantidad.
       const updatedCarrito = carrito.map((prod) =>
         prod.id_producto === producto.id_producto
           ? { ...prod, count: prod.count + cantidad }
@@ -39,7 +64,6 @@ const AppProvider = ({ children }) => {
       );
       setCarrito(updatedCarrito);
     } else {
-      // Si no está en el carrito, lo agregamos con la cantidad inicial
       const nuevoProducto = { ...producto, count: cantidad };
       setCarrito([...carrito, nuevoProducto]);
     }
@@ -47,6 +71,7 @@ const AppProvider = ({ children }) => {
     setActualizarTotal(true);
   };
 
+  // Lógica para eliminar del carrito
   const eliminarCarrito = (producto) => {
     const productoExistenteIndex = carrito.findIndex(
       (prod) => prod.id_producto === producto.id_producto
@@ -86,6 +111,7 @@ const AppProvider = ({ children }) => {
     }
   };
 
+  // Cálculo del total a pagar
   useEffect(() => {
     if (actualizarTotal) {
       const total = carrito.reduce((acc, producto) => {
@@ -108,6 +134,9 @@ const AppProvider = ({ children }) => {
         totalAPagar,
         agregarCarrito,
         eliminarCarrito,
+        userData,
+        actualizarUserData,
+        handleSubmit,  
       }}
     >
       {children}
