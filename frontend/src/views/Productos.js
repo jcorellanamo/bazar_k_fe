@@ -1,6 +1,7 @@
+// src/views/Productos.js
 import React, { useContext } from "react";
-import { useNavigate } from "react-router-dom";
-import { kfeContext } from "../context/AppProvider";
+import { useNavigate } from "react-router-dom"; // Importa el hook para navegación
+import { kfeContext } from "../context/AppProvider"; // Importa el contexto
 import "./Productos.css";
 
 const Productos = () => {
@@ -8,6 +9,7 @@ const Productos = () => {
   const { producto, cargando } = useContext(kfeContext); // Accedemos a 'producto' y 'cargando' desde el contexto
 
   // Función para navegar a la página de detalle de un producto
+
   const irADetalle = (id) => {
     navigate(`/detalle/${id}`);
   };
