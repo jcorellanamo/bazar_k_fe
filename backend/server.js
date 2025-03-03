@@ -315,6 +315,56 @@ app.get("/ventas", async (req, res) => {
   }
 });
 
+app.post("/contacto", async (req, res) => {
+  const { nombre, email, mensaje } = req.body;
+
+  try {
+    // Llamamos a la función para insertar el mensaje en la base de datos
+    const resultado = await mensajeContacto(nombre, email, mensaje);
+
+    // Respuesta exitosa
+    res.status(200).json({
+      mensaje: "Mensaje recibido, nos pondremos en contacto contigo pronto.",
+      contacto: resultado, // Aquí puedes devolver el contacto insertado si lo necesitas
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Hubo un problema al enviar el mensaje." });
+  }
+});
+
+// RUTA PARA INSERTAR UN COMENTARIO
+app.post("/comentarios", async (req, res) => {
+  const { nombre, email, comentario } = req.body;
+  // Verifica que se hayan enviado todos los campos
+  if (!nombre || !email || !comentario) {
+    return res.status(400).json({ error: "Todos los campos son requeridos." });
+  }
+  try {
+    const result = await pool.query(
+      "INSERT INTO comentarios (nombre, email, comentario) VALUES ($1, $2, $3) RETURNING *",
+      [nombre, email, comentario]
+    );
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    console.error("Error al insertar comentario:", err);
+    res.status(500).json({ error: "Error al insertar comentario." });
+  }
+});
+
+// RUTA PARA OBTENER COMENTARIOS (solo nombre y comentario)
+app.get("/comentarios", async (req, res) => {
+  try {
+    const result = await pool.query(
+      "SELECT nombre, comentario FROM comentarios ORDER BY fecha_envio DESC"
+    );
+    res.status(200).json(result.rows);
+  } catch (err) {
+    console.error("Error al obtener comentarios:", err);
+    res.status(500).json({ error: "Error al obtener comentarios." });
+  }
+});
+
 // MANEJO DE ERRORES 404
 app.use((req, res) => {
   res.status(404).json({ error: "Recurso no encontrado" });
