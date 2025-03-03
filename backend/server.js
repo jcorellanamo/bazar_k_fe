@@ -23,10 +23,22 @@ const {
 const getUsuarioById = require("./consultas/getUsuarioById");
 const iniciarSesion = require("./consultas/iniciarSesion");
 
+// Importa y configura la conexión a la base de datos
+const { Pool } = require("pg");
+const pool = new Pool({  
+  //configuración de la conexión, se crea una instancia de Pool con la configuración necesaria para conectarse a la base de datos PostgreSQL.
+  user: process.env.DB_USER || 'postgres',
+  host: process.env.DB_HOST || 'localhost',
+  database: process.env.DB_NAME || 'bazarkfe',
+  password: process.env.DB_PASSWORD || 'jc2013',
+  port: process.env.DB_PORT || 5432,
+  allowExitOnIdle: true, 
+});
+
 require("dotenv").config();
 
 const app = express();
-const PORT = process.env.PORT_SERVER || 3000;
+const PORT = process.env.PORT_SERVER || 5000;
 
 // Middlewares
 app.use(cors());
@@ -302,6 +314,38 @@ app.get("/ventas", async (req, res) => {
   }
 });
 
+// RUTA PARA INSERTAR UN COMENTARIO
+app.post("/comentarios", async (req, res) => {
+  const { nombre, email, comentario } = req.body;
+  // Verifica que se hayan enviado todos los campos
+  if (!nombre || !email || !comentario) {
+    return res.status(400).json({ error: "Todos los campos son requeridos." });
+  }
+  try {
+    const result = await pool.query(
+      "INSERT INTO comentarios (nombre, email, comentario) VALUES ($1, $2, $3) RETURNING *",
+      [nombre, email, comentario]
+    );
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    console.error("Error al insertar comentario:", err);
+    res.status(500).json({ error: "Error al insertar comentario." });
+  }
+});
+
+// RUTA PARA OBTENER COMENTARIOS (solo nombre y comentario)
+app.get("/comentarios", async (req, res) => {
+  try {
+    const result = await pool.query(
+      "SELECT nombre, comentario FROM comentarios ORDER BY fecha_envio DESC"
+    );
+    res.status(200).json(result.rows);
+  } catch (err) {
+    console.error("Error al obtener comentarios:", err);
+    res.status(500).json({ error: "Error al obtener comentarios." });
+  }
+});
+
 // MANEJO DE ERRORES 404
 app.use((req, res) => {
   res.status(404).json({ error: "Recurso no encontrado" });
@@ -311,3 +355,6 @@ app.use((req, res) => {
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en el puerto ${PORT}`);
 });
+
+
+

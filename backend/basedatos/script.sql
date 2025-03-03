@@ -125,3 +125,13 @@ CREATE TABLE contacto (
     fecha_envio TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario) ON DELETE SET NULL
 );
+
+-- Tabla de comentarios (Mensajes de clientes)
+CREATE TABLE comentarios (
+  id_comentario SERIAL PRIMARY KEY,
+  nombre VARCHAR(255) NOT NULL,
+  email VARCHAR(255) NOT NULL,
+  comentario VARCHAR(250) NOT NULL,
+  fecha_envio TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
