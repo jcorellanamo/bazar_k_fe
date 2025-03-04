@@ -12,13 +12,16 @@ const Contacto = () => {
     const newmensaje = { nombre, email, mensaje };
 
     try {
-      const response = await fetch("http:///localhost:5000/contacto", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newmensaje),
-      });
+      const response = await fetch(
+        "https://bazar-k-fe-tqh0.onrender.com/contacto",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newmensaje),
+        }
+      );
       if (response.ok) {
         // Limpiamos los campos del formulario
         setMensaje("");
