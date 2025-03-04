@@ -1,8 +1,8 @@
-import React, { useContext } from 'react';
-import { Link, useNavigate } from 'react-router-dom'; // Agrega useNavigate
-import './Registrarse.css';
-import { kfeContext } from '../context/AppProvider';
-import Swal from 'sweetalert2';
+import React, { useContext } from "react";
+import { Link, useNavigate } from "react-router-dom"; // Agrega useNavigate
+import "./Registrarse.css";
+import { kfeContext } from "../context/AppProvider";
+import Swal from "sweetalert2";
 
 const Registrarse = () => {
   const { userData, actualizarUserData, handleSubmit } = useContext(kfeContext);
@@ -13,10 +13,10 @@ const Registrarse = () => {
     e.preventDefault();
 
     // Manejo del registro (puedes agregar lógica de API aquí)
-    Swal.fire('¡Cuenta creada!', 'Tu cuenta fue creada con éxito.', 'success');
+    Swal.fire("¡Cuenta creada!", "Tu cuenta fue creada con éxito.", "success");
 
     // Redirige a la página de login
-    navigate('/login');
+    navigate("/login");
   };
 
   return (
@@ -35,7 +35,7 @@ const Registrarse = () => {
                 type="text"
                 placeholder="Nombre"
                 value={userData.nombre}
-                onChange={(e) => actualizarUserData('nombre', e.target.value)}
+                onChange={(e) => actualizarUserData("nombre", e.target.value)}
                 required
               />
             </div>
@@ -44,7 +44,9 @@ const Registrarse = () => {
                 type="text"
                 placeholder="Apellidos"
                 value={userData.apellidos}
-                onChange={(e) => actualizarUserData('apellidos', e.target.value)}
+                onChange={(e) =>
+                  actualizarUserData("apellidos", e.target.value)
+                }
                 required
               />
             </div>
@@ -53,7 +55,7 @@ const Registrarse = () => {
                 type="email"
                 placeholder="Dirección correo electrónico"
                 value={userData.email}
-                onChange={(e) => actualizarUserData('email', e.target.value)}
+                onChange={(e) => actualizarUserData("email", e.target.value)}
                 required
               />
             </div>
@@ -62,7 +64,9 @@ const Registrarse = () => {
                 type="password"
                 placeholder="Crear contraseña"
                 value={userData.contraseña}
-                onChange={(e) => actualizarUserData('contraseña', e.target.value)}
+                onChange={(e) =>
+                  actualizarUserData("contraseña", e.target.value)
+                }
                 required
               />
             </div>
@@ -71,7 +75,9 @@ const Registrarse = () => {
                 type="checkbox"
                 id="terms"
                 checked={userData.aceptoTerminos}
-                onChange={(e) => actualizarUserData('aceptoTerminos', e.target.checked)}
+                onChange={(e) =>
+                  actualizarUserData("aceptoTerminos", e.target.checked)
+                }
                 required
               />
               <label htmlFor="terms" className="terms-label">
@@ -83,7 +89,7 @@ const Registrarse = () => {
             </button>
           </form>
           <p className="member-text">
-            Ya estás registrado?{' '}
+            Ya estás registrado?{" "}
             <Link to="/login" className="login-link">
               Iniciar Sesión
             </Link>

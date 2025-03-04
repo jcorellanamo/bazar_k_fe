@@ -1,5 +1,5 @@
+// src/views/vontacto,js
 import React, { useState } from "react";
-import Swal from "sweetalert2";
 import "./Contacto.css";
 
 const Contacto = () => {
@@ -9,58 +9,28 @@ const Contacto = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Validación de campos
-    if (!nombre || !email || !mensaje) {
-      Swal.fire({
-        title: "Error",
-        text: "Por favor, completa todos los campos.",
-        icon: "error",
-      });
-      return;
-    }
+    const newmensaje = { nombre, email, mensaje };
 
     try {
-      // const id_usuario = localStorage.getItem("id_usuario") || null;
-
-      const response = await fetch("http://localhost:5000/contacto", {
+      const response = await fetch("http:///localhost:5000/contacto", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          nombre,
-          email,
-          mensaje,
-        }),
+        body: JSON.stringify(newmensaje),
       });
-
-      if (!response.ok) {
-        throw new Error("Error al enviar el mensaje.");
+      if (response.ok) {
+        // Limpiamos los campos del formulario
+        setMensaje("");
+        setNombre("");
+        setEmail("");
+        // Mostrar alerta de éxito
+        alert("¡Gracias por enviar tu formulario! Te contactaremos pronto.");
+      } else {
+        console.error("Error al enviar mensaje");
       }
-
-      const data = await response.json();
-
-      Swal.fire({
-        title: "¡Mensaje enviado!",
-        text:
-          data.mensaje || "Nos pondremos en contacto contigo lo antes posible.",
-        icon: "success",
-      });
-
-      // Limpiar campos del formulario después del envío
-      setNombre("");
-      setEmail("");
-      setMensaje("");
     } catch (error) {
-      console.error("Error al enviar el mensaje:", error);
-      Swal.fire({
-        title: "Error",
-        text:
-          error.message ||
-          "Hubo un problema al enviar tu mensaje. Intenta nuevamente.",
-        icon: "error",
-      });
+      console.error("Error:", error);
     }
   };
 
