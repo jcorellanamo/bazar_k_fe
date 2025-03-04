@@ -13,7 +13,6 @@ const getProductoById = require("./consultas/getProductoById");
 const { insertarProducto } = require("./consultas/insertarProducto");
 const eliminarProducto = require("./consultas/eliminarProducto");
 const modificarProducto = require("./consultas/modificarProducto");
-const mensajeContacto = require("./consultas/mensajeContacto");
 const obtenerDatosPersonales = require("./consultas/obtenerDatosPersonales");
 const cambiarDatosPersonales = require("./consultas/cambiarDatosPersonales");
 const obtenerVentas = require("./consultas/obtenerVentas");
@@ -31,7 +30,7 @@ const pool = new Pool({
   user: process.env.DB_USER || "postgres",
   host: process.env.DB_HOST || "localhost",
   database: process.env.DB_NAME || "bazarkfe",
-  password: process.env.DB_PASSWORD || "jc2013",
+  password: process.env.DB_PASSWORD || "Mari2019",
   port: process.env.DB_PORT || 5432,
   allowExitOnIdle: true,
 });
@@ -47,6 +46,18 @@ app.use(morgan("dev"));
 app.use(helmet());
 app.use(express.json());
 app.use(cookieParser());
+
+// Habilitar CORS para todas las rutas
+const cors = require("cors");
+
+// Configuración de CORS
+const corsOptions = {
+  origin: "http://localhost:3000", // Permitir solicitudes desde localhost:3000 (frontend React)
+  methods: ["GET", "POST", "PUT", "DELETE"], // Métodos permitidos
+  allowedHeaders: ["Content-Type"], // Permitir los encabezados que tu solicitud usa (como Content-Type)
+};
+
+app.use(cors(corsOptions)); // Usar cors para todas las rutas
 
 // Middleware para verificar el token
 const verifyToken = (req, res, next) => {
@@ -317,19 +328,19 @@ app.get("/ventas", async (req, res) => {
 
 app.post("/contacto", async (req, res) => {
   const { nombre, email, mensaje } = req.body;
-
+  // Verifica que se hayan enviado todos los campos
+  if (!nombre || !email || !mensaje) {
+    return res.status(400).json({ error: "Todos los campos son requeridos." });
+  }
   try {
-    // Llamamos a la función para insertar el mensaje en la base de datos
-    const resultado = await mensajeContacto(nombre, email, mensaje);
-
-    // Respuesta exitosa
-    res.status(200).json({
-      mensaje: "Mensaje recibido, nos pondremos en contacto contigo pronto.",
-      contacto: resultado, // Aquí puedes devolver el contacto insertado si lo necesitas
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Hubo un problema al enviar el mensaje." });
+    const result = await pool.query(
+      "INSERT INTO contacto (nombre, email, mensaje) VALUES ($1, $2, $3) RETURNING *",
+      [nombre, email, mensaje]
+    );
+    res.status(201).json(result.rows[0]); // Respuesta exitosa
+  } catch (err) {
+    console.error("Error al insertar contacto:", err);
+    res.status(500).json({ error: "Error al insertar contacto." }); // Error en la inserción
   }
 });
 
@@ -362,6 +373,24 @@ app.get("/comentarios", async (req, res) => {
   } catch (err) {
     console.error("Error al obtener comentarios:", err);
     res.status(500).json({ error: "Error al obtener comentarios." });
+  }
+});
+// RUTA PARA INSERTAR UN CONTACTO
+app.post("/contacto", async (req, res) => {
+  const { nombre, email, mensaje } = req.body;
+  // Verifica que se hayan enviado todos los campos
+  if (!nombre || !email || !mensaje) {
+    return res.status(400).json({ error: "Todos los campos son requeridos." });
+  }
+  try {
+    const result = await pool.query(
+      "INSERT INTO contacto (nombre, email, mensaje) VALUES ($1, $2, $3) RETURNING *",
+      [nombre, email, mensaje]
+    );
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    console.error("Error al insertar contacto:", err);
+    res.status(500).json({ error: "Error al insertar contacto." });
   }
 });
 
