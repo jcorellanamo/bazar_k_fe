@@ -8,7 +8,7 @@ const pool = new Pool({
   host: HOST || "localhost",
   database: DATABASE || "bazarkfe",
   user: USER || "postgres", //reemplaza por tu usuario,
-  password: PASSWORD || "", //ingresa tu clave
+  password: PASSWORD || "xxxxx", //ingresa tu clave
   port: PORT || 5432,
   allowExitOnIdle: true, // permite que la aplicación se cierre incluso si hay conexiones inactivas en el pool.
 });
