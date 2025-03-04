@@ -47,9 +47,6 @@ app.use(helmet());
 app.use(express.json());
 app.use(cookieParser());
 
-// Habilitar CORS para todas las rutas
-const cors = require("cors");
-
 // Configuración de CORS
 const corsOptions = {
   origin: "http://localhost:3000", // Permitir solicitudes desde localhost:3000 (frontend React)
