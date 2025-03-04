@@ -323,24 +323,6 @@ app.get("/ventas", async (req, res) => {
   }
 });
 
-app.post("/contacto", async (req, res) => {
-  const { nombre, email, mensaje } = req.body;
-  // Verifica que se hayan enviado todos los campos
-  if (!nombre || !email || !mensaje) {
-    return res.status(400).json({ error: "Todos los campos son requeridos." });
-  }
-  try {
-    const result = await pool.query(
-      "INSERT INTO contacto (nombre, email, mensaje) VALUES ($1, $2, $3) RETURNING *",
-      [nombre, email, mensaje]
-    );
-    res.status(201).json(result.rows[0]); // Respuesta exitosa
-  } catch (err) {
-    console.error("Error al insertar contacto:", err);
-    res.status(500).json({ error: "Error al insertar contacto." }); // Error en la inserción
-  }
-});
-
 // RUTA PARA INSERTAR UN COMENTARIO
 app.post("/comentarios", async (req, res) => {
   const { nombre, email, comentario } = req.body;
