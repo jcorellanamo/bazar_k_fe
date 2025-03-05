@@ -1,0 +1,35 @@
+[33m56d08e6[m[33m ([m[1;36mHEAD -> [m[1;32mrlinarez[m[33m, [m[1;31morigin/rlinarez[m[33m)[m Merge branch 'rlinarez' of github.com:jcorellanamo/bazar_k_fe into rlinarez
+[33mbc7db54[m Merge pull request #10 from jcorellanamo/master
+[33m326728f[m se agrega archvivo -env y test de Login
+[33mdabd180[m Se realizan ajustes en testInsertarProducto
+[33m46d4534[m se agrega ajusta insertarProducto
+[33m25cd960[m Se agrega función verificarCorreoExistente
+[33m43bf44e[m Se agregan consultas
+[33m842edf6[m BACKEND, SCRIPT, CONECCION, CONSULTAS Y TESTREGISTER.JS ACTUALIZADO
+[33m4746316[m Add script db
+[33m440c3f8[m Merge pull request #9 from jcorellanamo/rlinarez
+[33m37d5c2e[m se realiza ajuste en conjulta.js
+[33m6f68fa1[m  se crean rural y  consultas a realizar
+[33m9420c66[m Merge pull request #8 from jcorellanamo/rlinarez
+[33mae55464[m Create README.md
+[33m0908f3b[m Se realizan ajusten en vista NotFound
+[33m7e507c2[m Se realizan ajusten en Navbar
+[33m1ddffdc[m Se agrega vista Carrito
+[33m70df5b6[m Cambios varios de vistas
+[33m08a8acb[m se elimina uno de fetchProducto
+[33m4655608[m Merge pull request #7 from jcorellanamo/bgaete
+[33me941897[m[33m ([m[1;31morigin/bgaete[m[33m)[m Merge pull request #6 from jcorellanamo/master
+[33m1139859[m Actualización Blog 15/02/2025, 11:50am
+[33me45fa3d[m Merge pull request #5 from jcorellanamo/bgaete
+[33m84e9728[m Vistas del Blog agregadas
+[33m8be39c3[m Merge pull request #3 from jcorellanamo/bgaete
+[33m0661b41[m Pagina Blog agregada
+[33mc5503aa[m Merge branch 'master' into bgaete
+[33m268b60e[m Pagina Blog agregada
+[33ma58dfc8[m Merge pull request #4 from jcorellanamo/rlinarez
+[33mdb34ef9[m Se agraga vista Detalle producto, Se hase uno de context para el manejo del estado global
+[33m35e0f1a[m Merge pull request #2 from jcorellanamo/master
+[33mc75cb30[m Merge pull request #1 from jcorellanamo/bgaete
+[33mce6124c[m Pagina Home actualizada 00:26
+[33m61eb178[m Pagina Home actualizada 00:23
+[33m44b243e[m Initial commit

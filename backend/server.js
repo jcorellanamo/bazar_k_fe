@@ -25,14 +25,21 @@ const iniciarSesion = require("./consultas/iniciarSesion");
 
 // Importa y configura la conexión a la base de datos
 const { Pool } = require("pg");
-const pool = new Pool({  
+const pool = new Pool({
   //configuración de la conexión, se crea una instancia de Pool con la configuración necesaria para conectarse a la base de datos PostgreSQL.
+<<<<<<< HEAD
   user: process.env.DB_USER || 'postgres',
   host: process.env.DB_HOST || 'localhost',
   database: process.env.DB_NAME || 'bazarkfe',
   password: process.env.DB_PASSWORD || '497813',
+=======
+  user: process.env.DB_USER || "postgres",
+  host: process.env.DB_HOST || "localhost",
+  database: process.env.DB_NAME || "bazarkfe",
+  password: process.env.DB_PASSWORD || "Mari2019",
+>>>>>>> 850834d377d0b9087b52f43f46e45c0c55b1a2cd
   port: process.env.DB_PORT || 5432,
-  allowExitOnIdle: true, 
+  allowExitOnIdle: true,
 });
 
 require("dotenv").config();
@@ -46,6 +53,15 @@ app.use(morgan("dev"));
 app.use(helmet());
 app.use(express.json());
 app.use(cookieParser());
+
+// Configuración de CORS
+const corsOptions = {
+  origin: "http://localhost:3000", // Permitir solicitudes desde localhost:3000 (frontend React)
+  methods: ["GET", "POST", "PUT", "DELETE"], // Métodos permitidos
+  allowedHeaders: ["Content-Type"], // Permitir los encabezados que tu solicitud usa (como Content-Type)
+};
+
+app.use(cors(corsOptions)); // Usar cors para todas las rutas
 
 // Middleware para verificar el token
 const verifyToken = (req, res, next) => {
@@ -363,6 +379,24 @@ app.get("/comentarios", async (req, res) => {
     res.status(500).json({ error: "Error al obtener comentarios." });
   }
 });
+// RUTA PARA INSERTAR UN CONTACTO
+app.post("/contacto", async (req, res) => {
+  const { nombre, email, mensaje } = req.body;
+  // Verifica que se hayan enviado todos los campos
+  if (!nombre || !email || !mensaje) {
+    return res.status(400).json({ error: "Todos los campos son requeridos." });
+  }
+  try {
+    const result = await pool.query(
+      "INSERT INTO contacto (nombre, email, mensaje) VALUES ($1, $2, $3) RETURNING *",
+      [nombre, email, mensaje]
+    );
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    console.error("Error al insertar contacto:", err);
+    res.status(500).json({ error: "Error al insertar contacto." });
+  }
+});
 
 // MANEJO DE ERRORES 404
 app.use((req, res) => {
@@ -373,6 +407,3 @@ app.use((req, res) => {
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en el puerto ${PORT}`);
 });
-
-
-
