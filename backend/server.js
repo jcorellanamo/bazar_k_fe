@@ -13,7 +13,6 @@ const getProductoById = require("./consultas/getProductoById");
 const { insertarProducto } = require("./consultas/insertarProducto");
 const eliminarProducto = require("./consultas/eliminarProducto");
 const modificarProducto = require("./consultas/modificarProducto");
-const mensajeContacto = require("./consultas/mensajeContacto");
 const obtenerDatosPersonales = require("./consultas/obtenerDatosPersonales");
 const cambiarDatosPersonales = require("./consultas/cambiarDatosPersonales");
 const obtenerVentas = require("./consultas/obtenerVentas");
@@ -28,10 +27,12 @@ const iniciarSesion = require("./consultas/iniciarSesion");
 const { Pool } = require("pg");
 const pool = new Pool({
   //configuración de la conexión, se crea una instancia de Pool con la configuración necesaria para conectarse a la base de datos PostgreSQL.
+
   user: process.env.DB_USER || "postgres",
   host: process.env.DB_HOST || "localhost",
   database: process.env.DB_NAME || "bazarkfe",
-  password: process.env.DB_PASSWORD || "",
+  password: process.env.DB_PASSWORD || "Mari2029$",
+
   port: process.env.DB_PORT || 5432,
   allowExitOnIdle: true,
 });
@@ -47,6 +48,15 @@ app.use(morgan("dev"));
 app.use(helmet());
 app.use(express.json());
 app.use(cookieParser());
+
+// Configuración de CORS
+const corsOptions = {
+  origin: "http://localhost:3000", // Permitir solicitudes desde localhost:3000 (frontend React)
+  methods: ["GET", "POST", "PUT", "DELETE"], // Métodos permitidos
+  allowedHeaders: ["Content-Type"], // Permitir los encabezados que tu solicitud usa (como Content-Type)
+};
+
+app.use(cors(corsOptions)); // Usar cors para todas las rutas
 
 // Middleware para verificar el token
 const verifyToken = (req, res, next) => {
@@ -89,6 +99,23 @@ app.post(
     }
 
     const { email } = req.body;
+
+    app.get("/verificar-email", async (req, res) => {
+      const { email } = req.query;
+      try {
+        const consulta = `SELECT * FROM usuarios WHERE email = $1;`;
+        const { rows } = await pool.query(consulta, [email]);
+
+        if (rows.length > 0) {
+          return res.json({ existe: true });
+        } else {
+          return res.json({ existe: false });
+        }
+      } catch (error) {
+        console.error("Error al verificar correo:", error);
+        return res.status(500).json({ error: "Error al verificar correo" });
+      }
+    });
 
     try {
       // Verificar si el correo ya está registrado
@@ -315,24 +342,6 @@ app.get("/ventas", async (req, res) => {
   }
 });
 
-app.post("/contacto", async (req, res) => {
-  const { nombre, email, mensaje } = req.body;
-
-  try {
-    // Llamamos a la función para insertar el mensaje en la base de datos
-    const resultado = await mensajeContacto(nombre, email, mensaje);
-
-    // Respuesta exitosa
-    res.status(200).json({
-      mensaje: "Mensaje recibido, nos pondremos en contacto contigo pronto.",
-      contacto: resultado, // Aquí puedes devolver el contacto insertado si lo necesitas
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Hubo un problema al enviar el mensaje." });
-  }
-});
-
 // RUTA PARA INSERTAR UN COMENTARIO
 app.post("/comentarios", async (req, res) => {
   const { nombre, email, comentario } = req.body;
@@ -362,6 +371,24 @@ app.get("/comentarios", async (req, res) => {
   } catch (err) {
     console.error("Error al obtener comentarios:", err);
     res.status(500).json({ error: "Error al obtener comentarios." });
+  }
+});
+// RUTA PARA INSERTAR UN CONTACTO
+app.post("/contacto", async (req, res) => {
+  const { nombre, email, mensaje } = req.body;
+  // Verifica que se hayan enviado todos los campos
+  if (!nombre || !email || !mensaje) {
+    return res.status(400).json({ error: "Todos los campos son requeridos." });
+  }
+  try {
+    const result = await pool.query(
+      "INSERT INTO contacto (nombre, email, mensaje) VALUES ($1, $2, $3) RETURNING *",
+      [nombre, email, mensaje]
+    );
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    console.error("Error al insertar contacto:", err);
+    res.status(500).json({ error: "Error al insertar contacto." });
   }
 });
 

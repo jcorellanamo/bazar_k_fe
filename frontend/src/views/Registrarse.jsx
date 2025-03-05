@@ -1,23 +1,75 @@
-import React, { useContext } from "react";
-import { Link, useNavigate } from "react-router-dom"; // Agrega useNavigate
-import "./Registrarse.css";
-import { kfeContext } from "../context/AppProvider";
-import Swal from "sweetalert2";
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import './Registrarse.css';
+import Swal from 'sweetalert2';
 
-const Registrarse = () => {
-  const { userData, actualizarUserData, handleSubmit } = useContext(kfeContext);
-  const navigate = useNavigate(); // Inicializa el hook useNavigate
+function Register() {
+  const [nombre, setNombre] = useState('');
+  const [apellido, setApellido] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [telefono, setTelefono] = useState('');
+  const navigate = useNavigate(); // Hook para redirección
 
-  // Modificamos handleSubmit para redirigir después del registro
-  const handleFormSubmit = async (e) => {
-    e.preventDefault();
+  // Función para verificar si el email ya está registrado
+  async function verificarCorreoExistente(email) {
+    try {
+      const response = await fetch(`http://localhost:5000/verificar-email?email=${email}`);
+      const data = await response.json();
+      return data.existe; // true si el correo ya está en la base de datos
+    } catch (error) {
+      console.error("Error al verificar el correo:", error);
+      return false; // En caso de error, permitir el registro
+    }
+  }
 
-    // Manejo del registro (puedes agregar lógica de API aquí)
-    Swal.fire("¡Cuenta creada!", "Tu cuenta fue creada con éxito.", "success");
+  async function registrarse(event) {
+    event.preventDefault();
 
-    // Redirige a la página de login
-    navigate("/login");
-  };
+    // Validar que la contraseña tenga al menos 6 caracteres
+    if (password.length < 6) {
+      Swal.fire('Error', 'La contraseña debe tener al menos 6 caracteres', 'error');
+      return;
+    }
+
+    // Verificar si el email ya está registrado
+    const emailExiste = await verificarCorreoExistente(email);
+    if (emailExiste) {
+      Swal.fire('Error', 'El usuario ya está registrado', 'error');
+      return;
+    }
+
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Accept", "*/*");
+
+    const raw = JSON.stringify({
+      "nombre": nombre,
+      "apellido": apellido,
+      "email": email,
+      "telefono": telefono,
+      "password": password
+    });
+
+    const requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow"
+    };
+
+    fetch("http://localhost:5000/registro", requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        if (result.error) {
+          Swal.fire('Error', result.error, 'error');
+        } else {
+          Swal.fire('¡Cuenta creada!', 'Tu cuenta fue creada con éxito.', 'success');
+          navigate('/login'); // Redirige tras el registro
+        }
+      })
+      .catch((error) => console.error("Error al registrar:", error));
+  }
 
   return (
     <div>
@@ -29,13 +81,13 @@ const Registrarse = () => {
         <div className="register-form-container">
           <h1>Crear Cuenta</h1>
           <p>Crea tu cuenta en segundos</p>
-          <form className="register-form" onSubmit={handleFormSubmit}>
+          <form className="register-form" onSubmit={registrarse}>
             <div className="input-group">
               <input
                 type="text"
                 placeholder="Nombre"
-                value={userData.nombre}
-                onChange={(e) => actualizarUserData("nombre", e.target.value)}
+                value={nombre}
+                onChange={(e) => setNombre(e.target.value)}
                 required
               />
             </div>
@@ -43,10 +95,8 @@ const Registrarse = () => {
               <input
                 type="text"
                 placeholder="Apellidos"
-                value={userData.apellidos}
-                onChange={(e) =>
-                  actualizarUserData("apellidos", e.target.value)
-                }
+                value={apellido}
+                onChange={(e) => setApellido(e.target.value)}
                 required
               />
             </div>
@@ -54,32 +104,31 @@ const Registrarse = () => {
               <input
                 type="email"
                 placeholder="Dirección correo electrónico"
-                value={userData.email}
-                onChange={(e) => actualizarUserData("email", e.target.value)}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 required
               />
             </div>
             <div className="input-group">
               <input
                 type="password"
-                placeholder="Crear contraseña"
-                value={userData.contraseña}
-                onChange={(e) =>
-                  actualizarUserData("contraseña", e.target.value)
-                }
+                placeholder="Crear contraseña (mínimo 6 caracteres)"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div>
+            <div className="input-group">
+              <input
+                type="text"
+                placeholder="Teléfono"
+                value={telefono}
+                onChange={(e) => setTelefono(e.target.value)}
                 required
               />
             </div>
             <div className="checkbox-group">
-              <input
-                type="checkbox"
-                id="terms"
-                checked={userData.aceptoTerminos}
-                onChange={(e) =>
-                  actualizarUserData("aceptoTerminos", e.target.checked)
-                }
-                required
-              />
+              <input type="checkbox" id="terms" required />
               <label htmlFor="terms" className="terms-label">
                 Acepto los términos y condiciones
               </label>
@@ -89,7 +138,7 @@ const Registrarse = () => {
             </button>
           </form>
           <p className="member-text">
-            Ya estás registrado?{" "}
+            Ya estás registrado?{' '}
             <Link to="/login" className="login-link">
               Iniciar Sesión
             </Link>
@@ -98,6 +147,6 @@ const Registrarse = () => {
       </div>
     </div>
   );
-};
+}
 
-export default Registrarse;
+export default Register;

@@ -14,8 +14,9 @@ const verificarCorreoExistente = async (email) => {
   } catch (error) {
     console.error("Error al verificar correo:", error);
     throw error;
-  }
-};
+   }
+ };
+
 
 // Función para registrar el usuario
 const registrarUsuario = async (datos) => {

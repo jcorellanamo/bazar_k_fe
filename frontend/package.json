@@ -17,9 +17,11 @@
     "web-vitals": "^4.2.4"
   },
   "scripts": {
+
     "start": "react-scripts start",
     "server": "react-scripts start",
     "client": "react-scripts start"
+
   },
   "eslintConfig": {
     "extends": [
