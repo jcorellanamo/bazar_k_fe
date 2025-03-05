@@ -30,7 +30,7 @@ const pool = new Pool({
   user: process.env.DB_USER || 'postgres',
   host: process.env.DB_HOST || 'localhost',
   database: process.env.DB_NAME || 'bazarkfe',
-  password: process.env.DB_PASSWORD || 'jc2013',
+  password: process.env.DB_PASSWORD || '497813',
   port: process.env.DB_PORT || 5432,
   allowExitOnIdle: true, 
 });
@@ -88,6 +88,24 @@ app.post(
     }
 
     const { email } = req.body;
+
+    app.get('/verificar-email', async (req, res) => {
+      const { email } = req.query;
+      try {
+        const consulta = `SELECT * FROM usuarios WHERE email = $1;`;
+        const { rows } = await pool.query(consulta, [email]);
+    
+        if (rows.length > 0) {
+          return res.json({ existe: true });
+        } else {
+          return res.json({ existe: false });
+        }
+      } catch (error) {
+        console.error("Error al verificar correo:", error);
+        return res.status(500).json({ error: "Error al verificar correo" });
+      }
+    });
+    
 
     try {
       // Verificar si el correo ya está registrado
