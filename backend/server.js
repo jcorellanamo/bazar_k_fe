@@ -2,6 +2,7 @@
 const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
+const { pool } = require("./coneccion/coneccion"); // Aquí se importa el pool de conexión
 const cookieParser = require("cookie-parser");
 const helmet = require("helmet");
 const jwt = require("jsonwebtoken");
@@ -22,20 +23,6 @@ const {
 } = require("./consultas/registrarUsuario");
 const getUsuarioById = require("./consultas/getUsuarioById");
 const iniciarSesion = require("./consultas/iniciarSesion");
-
-// Importa y configura la conexión a la base de datos
-const { Pool } = require("pg");
-const pool = new Pool({
-  //configuración de la conexión, se crea una instancia de Pool con la configuración necesaria para conectarse a la base de datos PostgreSQL.
-
-  user: process.env.DB_USER || "postgres",
-  host: process.env.DB_HOST || "localhost",
-  database: process.env.DB_NAME || "bazarkfe",
-  password: process.env.DB_PASSWORD || "Mari2029$",
-
-  port: process.env.DB_PORT || 5432,
-  allowExitOnIdle: true,
-});
 
 require("dotenv").config();
 
@@ -100,23 +87,6 @@ app.post(
 
     const { email } = req.body;
 
-    app.get("/verificar-email", async (req, res) => {
-      const { email } = req.query;
-      try {
-        const consulta = `SELECT * FROM usuarios WHERE email = $1;`;
-        const { rows } = await pool.query(consulta, [email]);
-
-        if (rows.length > 0) {
-          return res.json({ existe: true });
-        } else {
-          return res.json({ existe: false });
-        }
-      } catch (error) {
-        console.error("Error al verificar correo:", error);
-        return res.status(500).json({ error: "Error al verificar correo" });
-      }
-    });
-
     try {
       // Verificar si el correo ya está registrado
       const usuarioExistente = await verificarCorreoExistente(email);
@@ -136,33 +106,10 @@ app.post(
   }
 );
 
-//RUTA USUARIO ID
-app.put("/usuarios/:id", async (req, res) => {
-  const { id } = req.params;
-  const { nombre, apellido, telefono, email } = req.body;
-
-  try {
-    const datosActualizados = await getUsuarioById({
-      id_usuario: id,
-      nombre,
-      apellido,
-      telefono,
-      email,
-    });
-    res.status(200).json({
-      message: "Datos actualizados con éxito",
-      usuario: datosActualizados,
-    });
-  } catch (error) {
-    console.error("Error al actualizar datos:", error.message);
-    res.status(500).json({ error: "No se pudo actualizar los datos." });
-  }
-});
-
 // RUTA LOGIN PARA USUARIOS
 app.post(
   "/login",
-  [body("email").isEmail(), body("password").isString().isLength({ min: 6 })],
+  [body("email").isEmail(), body("contraseña").isString().isLength({ min: 6 })],
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -223,7 +170,6 @@ app.post("/productos", async (req, res) => {
   } = req.body;
 
   try {
-    // Intentar insertar el producto
     const nuevoProducto = await insertarProducto(
       nombre,
       descripcion,
@@ -235,22 +181,21 @@ app.post("/productos", async (req, res) => {
       origen
     );
 
-    // Si todo va bien, enviar respuesta de éxito
     res.status(201).json({
       message: "Producto insertado con éxito",
       producto: nuevoProducto,
     });
   } catch (error) {
     console.error("Error al insertar producto:", error.message);
-    res.status(400).json({ error: error.message }); // Retornar el error de la verificación
+    res.status(400).json({ error: error.message });
   }
 });
+
 // RUTA PARA ELIMINAR UN PRODUCTO
 app.delete("/productos/:id", async (req, res) => {
   const { id } = req.params;
 
   try {
-    // Llamar a una función que elimine el producto (deberás crear esta función en tu archivo de consultas)
     const productoEliminado = await eliminarProducto(id);
 
     if (!productoEliminado) {
@@ -279,7 +224,6 @@ app.put("/productos/:id", async (req, res) => {
   } = req.body;
 
   try {
-    // Llamar a una función que modifique el producto (deberás crear esta función en tu archivo de consultas)
     const productoModificado = await modificarProducto(
       id,
       nombre,
@@ -318,68 +262,15 @@ app.get("/datospersonales", verifyToken, async (req, res) => {
     res.status(500).json({ error: "Error al obtener datos personales" });
   }
 });
-
-// RUTA PARA MODIFICAR DATOS PERSONALES
-app.put("/datospersonales", verifyToken, async (req, res) => {
-  try {
-    await cambiarDatosPersonales({
-      id_usuario: req.user.id_usuario,
-      ...req.body,
-    });
-    res.status(204).send();
-  } catch (error) {
-    res.status(500).json({ error: "No se pudo actualizar la información" });
-  }
-});
-
-// RUTA PARA OBTENER VENTAS / PEDIDOS
-app.get("/ventas", async (req, res) => {
-  try {
-    const ventas = await obtenerVentas();
-    res.json(ventas);
-  } catch (error) {
-    res.status(500).json({ error: "Error al obtener ventas" });
-  }
-});
-
-// RUTA PARA INSERTAR UN COMENTARIO
-app.post("/comentarios", async (req, res) => {
-  const { nombre, email, comentario } = req.body;
-  // Verifica que se hayan enviado todos los campos
-  if (!nombre || !email || !comentario) {
-    return res.status(400).json({ error: "Todos los campos son requeridos." });
-  }
-  try {
-    const result = await pool.query(
-      "INSERT INTO comentarios (nombre, email, comentario) VALUES ($1, $2, $3) RETURNING *",
-      [nombre, email, comentario]
-    );
-    res.status(201).json(result.rows[0]);
-  } catch (err) {
-    console.error("Error al insertar comentario:", err);
-    res.status(500).json({ error: "Error al insertar comentario." });
-  }
-});
-
-// RUTA PARA OBTENER COMENTARIOS (solo nombre y comentario)
-app.get("/comentarios", async (req, res) => {
-  try {
-    const result = await pool.query(
-      "SELECT nombre, comentario FROM comentarios ORDER BY fecha_envio DESC"
-    );
-    res.status(200).json(result.rows);
-  } catch (err) {
-    console.error("Error al obtener comentarios:", err);
-    res.status(500).json({ error: "Error al obtener comentarios." });
-  }
-});
 // RUTA PARA INSERTAR UN CONTACTO
 app.post("/contacto", async (req, res) => {
+  console.log("Solicitud recibida en /contacto");
   const { nombre, email, mensaje } = req.body;
-  // Verifica que se hayan enviado todos los campos
+
   if (!nombre || !email || !mensaje) {
     return res.status(400).json({ error: "Todos los campos son requeridos." });
   }
+
   try {
     const result = await pool.query(
       "INSERT INTO contacto (nombre, email, mensaje) VALUES ($1, $2, $3) RETURNING *",
@@ -390,11 +281,6 @@ app.post("/contacto", async (req, res) => {
     console.error("Error al insertar contacto:", err);
     res.status(500).json({ error: "Error al insertar contacto." });
   }
-});
-
-// MANEJO DE ERRORES 404
-app.use((req, res) => {
-  res.status(404).json({ error: "Recurso no encontrado" });
 });
 
 // INICIAR SERVIDOR
