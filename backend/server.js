@@ -27,17 +27,12 @@ const iniciarSesion = require("./consultas/iniciarSesion");
 const { Pool } = require("pg");
 const pool = new Pool({
   //configuración de la conexión, se crea una instancia de Pool con la configuración necesaria para conectarse a la base de datos PostgreSQL.
-<<<<<<< HEAD
+
   user: process.env.DB_USER || 'postgres',
   host: process.env.DB_HOST || 'localhost',
   database: process.env.DB_NAME || 'bazarkfe',
   password: process.env.DB_PASSWORD || '497813',
-=======
-  user: process.env.DB_USER || "postgres",
-  host: process.env.DB_HOST || "localhost",
-  database: process.env.DB_NAME || "bazarkfe",
-  password: process.env.DB_PASSWORD || "Mari2019",
->>>>>>> 850834d377d0b9087b52f43f46e45c0c55b1a2cd
+
   port: process.env.DB_PORT || 5432,
   allowExitOnIdle: true,
 });
