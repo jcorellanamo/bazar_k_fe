@@ -1,8 +1,7 @@
-import React, { useContext } from "react";
-import { Link, useNavigate } from "react-router-dom"; // Agrega useNavigate
-import "./Registrarse.css";
-import { kfeContext } from "../context/AppProvider";
-import Swal from "sweetalert2";
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import './Registrarse.css';
+import Swal from 'sweetalert2';
 
 function Register() {
   const [nombre, setNombre] = useState('');
@@ -27,12 +26,50 @@ function Register() {
   async function registrarse(event) {
     event.preventDefault();
 
-    // Manejo del registro (puedes agregar lógica de API aquí)
-    Swal.fire('¡Cuenta creada!', 'Tu cuenta fue creada con éxito.', 'success');
+    // Validar que la contraseña tenga al menos 6 caracteres
+    if (password.length < 6) {
+      Swal.fire('Error', 'La contraseña debe tener al menos 6 caracteres', 'error');
+      return;
+    }
 
-    // Redirige a la página de login
-    navigate('/login');
-  };
+    // Verificar si el email ya está registrado
+    const emailExiste = await verificarCorreoExistente(email);
+    if (emailExiste) {
+      Swal.fire('Error', 'El usuario ya está registrado', 'error');
+      return;
+    }
+
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Accept", "*/*");
+
+    const raw = JSON.stringify({
+      "nombre": nombre,
+      "apellido": apellido,
+      "email": email,
+      "telefono": telefono,
+      "password": password
+    });
+
+    const requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow"
+    };
+
+    fetch("http://localhost:5000/registro", requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        if (result.error) {
+          Swal.fire('Error', result.error, 'error');
+        } else {
+          Swal.fire('¡Cuenta creada!', 'Tu cuenta fue creada con éxito.', 'success');
+          navigate('/login'); // Redirige tras el registro
+        }
+      })
+      .catch((error) => console.error("Error al registrar:", error));
+  }
 
   return (
     <div>
