@@ -3,6 +3,8 @@
 require("dotenv").config();
 const { pool } = require("../coneccion/coneccion");
 
+
+
 // Función para verificar si el correo ya está registrado
 const verificarCorreoExistente = async (email) => {
   const consulta = `

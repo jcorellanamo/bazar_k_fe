@@ -24,6 +24,8 @@ const {
 const getUsuarioById = require("./consultas/getUsuarioById");
 const iniciarSesion = require("./consultas/iniciarSesion");
 
+
+
 require("dotenv").config();
 
 const app = express();
@@ -107,23 +109,53 @@ app.post(
 );
 
 // RUTA LOGIN PARA USUARIOS
+
+// Ruta de inicio de sesión
 app.post(
   "/login",
-  [body("email").isEmail(), body("contraseña").isString().isLength({ min: 6 })],
+  [
+    body("email").isEmail().withMessage("El email no es válido"),
+    body("password").isString().isLength({ min: 6 }).withMessage("La contraseña debe tener al menos 6 caracteres"),
+  ],
   async (req, res) => {
+    // Validar los datos
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
+
+    const { email, password } = req.body;
+
     try {
-      const token = await iniciarSesion(req.body);
+      // Llamar a la función de iniciar sesión y obtener el token
+      const token = await iniciarSesion({ email, password });
+      
+      // Responder con el token generado
       res.status(200).json({ token });
     } catch (error) {
-      console.error("Error en el inicio de sesión:", error.message);
-      res.status(401).json({ error: "Credenciales incorrectas" });
+      // En caso de error (usuario no encontrado o contraseña incorrecta)
+      res.status(401).json({ error: error.message });
     }
   }
 );
+
+// app.post(
+//   "/login",
+//   [body("email").isEmail(), body("password").isString().isLength({ min: 6 })],
+//   async (req, res) => {
+//     const errors = validationResult(req);
+//     if (!errors.isEmpty()) {
+//       return res.status(400).json({ errors: errors.array() });
+//     }
+//     try {
+//       const token = await iniciarSesion(req.body);
+//       res.status(200).json({ token });
+//     } catch (error) {
+//       console.error("Error en el inicio de sesión:", error.message);
+//       res.status(401).json({ error: "Credenciales incorrectas" });
+//     }
+//   }
+// );
 
 // RUTA PARA PRODUCTOS
 app.get("/productos", async (req, res) => {
