@@ -1,16 +1,22 @@
 // coneccion/coneccion.js
-const { Pool } = require("pg"); //importa la clase Pool de la biblioteca pg
 
-const { HOST, DATABASE, USER, PASSWORD, PORT } = process.env; //extrae las variables de entorno necesarias para la conexión a la base de datos del archivo .env
+require('dotenv').config();
+const { Pool } = require('pg'); 
+
+// Extraer las variables de entorno
+const { DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, DB_PORT } = process.env;
 
 const pool = new Pool({
-  //configuración de la conexión, se crea una instancia de Pool con la configuración necesaria para conectarse a la base de datos PostgreSQL.
-  host: HOST || "localhost",
-  database: DATABASE || "bazarkfe",
-  user: USER || "postgres", //reemplaza por tu usuario,
-  password: PASSWORD || "497813", //ingresa tu clave
-  port: PORT || 5432,
-  allowExitOnIdle: true, // permite que la aplicación se cierre incluso si hay conexiones inactivas en el pool.
+  host: DB_HOST || "localhost",    // Por defecto se usa localhost si no está definida
+  database: DB_NAME || "bazarkfe", // Nombre de la base de datos
+  user: DB_USER || "postgres",     // Usuario de la base de datos
+  password: DB_PASSWORD || "497813", // Contraseña de la base de datos
+  port: DB_PORT || 5432,           // Puerto de la base de datos (por defecto 5432)
+  allowExitOnIdle: true,           // Permite que la aplicación se cierre incluso si hay conexiones inactivas
 });
 
 module.exports = { pool };
+
+
+
+
