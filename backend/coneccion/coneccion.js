@@ -12,8 +12,10 @@ const pool = new Pool({
   user: DB_USER || "postgres",     // Usuario de la base de datos
   password: DB_PASSWORD || "497813", // Contraseña de la base de datos
   port: DB_PORT || 5432,           // Puerto de la base de datos (por defecto 5432)
-  allowExitOnIdle: true,           // Permite que la aplicación se cierre incluso si hay conexiones inactivas
+  allowExitOnIdle: true, // Permite que la aplicación se cierre incluso si hay conexiones inactivas
+  ssl: true    
 });
+         
 
 module.exports = { pool };
 
