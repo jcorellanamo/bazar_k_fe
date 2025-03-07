@@ -10,7 +10,7 @@ const pool = new Pool({
   host: DB_HOST || "localhost", // Por defecto se usa localhost si no está definida
   database: DB_NAME || "bazarkfe", // Nombre de la base de datos
   user: DB_USER || "postgres", // Usuario de la base de datos
-  password: DB_PASSWORD || "Mari2019", // Contraseña de la base de datos
+  password: DB_PASSWORD || "", // Contraseña de la base de datos
   port: DB_PORT || 5432, // Puerto de la base de datos (por defecto 5432)
   allowExitOnIdle: true, // Permite que la aplicación se cierre incluso si hay conexiones inactivas
   ssl: false,
