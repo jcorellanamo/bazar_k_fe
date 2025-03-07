@@ -31,21 +31,22 @@ const app = express();
 // server.js
 const PORT = process.env.PORT || 5000;
 
+// Configuración de CORS
+const corsOptions = {
+  origin: "https://zingy-treacle-ed92d4.netlify.app", // O especifica "https://zingy-treacle-ed92d4.netlify.app"
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+};
+
+
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions)); // Manejar solicitudes preflight
+
 // Middlewares
-app.use(cors());
 app.use(morgan("dev"));
 app.use(helmet());
 app.use(express.json());
 app.use(cookieParser());
-
-// Configuración de CORS
-const corsOptions = {
-  origin: "*", // Permite solicitudes desde cualquier origen
-  methods: ["GET", "POST", "PUT", "DELETE"], // Métodos permitidos
-  allowedHeaders: ["Content-Type"], // Permitir los encabezados que tu solicitud usa (como Content-Type)
-};
-
-app.use(cors(corsOptions)); // Usar cors para todas las rutas
 
 // Middleware para verificar el token
 const verifyToken = (req, res, next) => {
