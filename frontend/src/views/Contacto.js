@@ -11,7 +11,7 @@ const Contacto = () => {
   // Definir API_URL correctamente
   const API_URL = typeof import.meta.env !== "undefined" && import.meta.env.VITE_API_URL
   ? import.meta.env.VITE_API_URL
-  : "https://bazar-k-fe-tqh0.onrender.com";
+  : "https://bazar-k-fe-1.onrender.com";
 
 console.log("API_URL en uso:", API_URL);
 
