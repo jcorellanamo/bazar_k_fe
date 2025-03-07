@@ -8,13 +8,16 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 
   const handleSubmit = async (event) => {
     event.preventDefault();
   
     try {
-      const response = await axios.post(`${process.env.REACT_APP_API_URL}/login`, { email, password });
-  
+      const response = await axios.post(`${API_URL}/login`, { email, password });
+      console.log('Respuesta del servidor:', response.data);
+      localStorage.setItem('token', response.data.token);
       Swal.fire('¡Bienvenido!', `Bienvenido, ${response.data.usuario.nombre}`, 'success');
       navigate('/'); // Redirigir a la página principal
     } catch (error) {

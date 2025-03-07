@@ -7,6 +7,7 @@ const BlogVista1 = () => {
   const [nombre, setNombre] = useState("");
   const [email, setEmail] = useState("");
   const [comentarios, setComentarios] = useState([]);
+  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
   // Al montar el componente, obtenemos los comentarios existentes
   useEffect(() => {
@@ -15,20 +16,20 @@ const BlogVista1 = () => {
 
   const fetchComentarios = async () => {
     try {
-      const response = await fetch("http://localhost:5000/comentarios");
+      const response = await fetch(`${API_URL}/comentarios`);
       const data = await response.json();
       setComentarios(data);
     } catch (error) {
       console.error("Error fetching comments:", error);
     }
   };
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newComentario = { nombre, email, comentario };
-
+  
     try {
-      const response = await fetch("http://localhost:5000/comentarios", {
+      const response = await fetch(`${API_URL}/comentarios`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -36,11 +37,9 @@ const BlogVista1 = () => {
         body: JSON.stringify(newComentario),
       });
       if (response.ok) {
-        // Limpiamos los campos del formulario
         setComentario("");
         setNombre("");
         setEmail("");
-        // Actualizamos la lista de comentarios
         fetchComentarios();
       } else {
         console.error("Error al enviar comentario");
@@ -49,6 +48,7 @@ const BlogVista1 = () => {
       console.error("Error:", error);
     }
   };
+  
 
   return (
     <div className="blog-container">
