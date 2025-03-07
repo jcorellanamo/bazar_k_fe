@@ -301,23 +301,27 @@ app.get("/datospersonales", verifyToken, async (req, res) => {
 // RUTA PARA INSERTAR UN CONTACTO
 app.post("/contacto", async (req, res) => {
   console.log("Solicitud recibida en /contacto");
-  const { nombre, email, mensaje } = req.body;
+  const { id_usuario, nombre, email, mensaje } = req.body;
 
   if (!nombre || !email || !mensaje) {
     return res.status(400).json({ error: "Todos los campos son requeridos." });
   }
 
+  // Si id_usuario viene vacío o no está definido, lo convertimos a null
+  const userId = id_usuario && id_usuario.trim() !== "" ? id_usuario : null;
+
   try {
     const result = await pool.query(
-      "INSERT INTO contacto (nombre, email, mensaje) VALUES ($1, $2, $3) RETURNING *",
-      [nombre, email, mensaje]
+      "INSERT INTO contacto (id_usuario, nombre, email, mensaje) VALUES ($1, $2, $3, $4) RETURNING *",
+      [userId, nombre, email, mensaje]
     );
     res.status(201).json(result.rows[0]);
   } catch (err) {
-    console.error("Error al insertar contacto:", err); // Log completo del error
+    console.error("Error al insertar contacto:", err);
     res.status(500).json({ error: "Error al insertar contacto.", details: err.message });
   }
 });
+
 
 
 // INICIAR SERVIDOR
