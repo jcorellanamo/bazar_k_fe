@@ -12,11 +12,12 @@ const Contacto = () => {
     const newmensaje = { nombre, email, mensaje };
 
     try {
-      const response = await axios.post("/contacto", newmensaje, {
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/contacto`, newmensaje, {
         headers: {
-          "Content-Type": "application/json", // Establecemos el tipo de contenido
+          "Content-Type": "application/json",
         },
       });
+      
 
       // Verificamos si la respuesta fue exitosa
       if (response.status >= 200 && response.status < 300) {
