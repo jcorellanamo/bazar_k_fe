@@ -1,25 +1,25 @@
 // src/views/vontacto,js
 import React, { useState } from "react";
 import "./Contacto.css";
-
+import axios from "axios"; // Importamos axios
 const Contacto = () => {
   const [nombre, setNombre] = useState("");
   const [email, setEmail] = useState("");
   const [mensaje, setMensaje] = useState("");
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); // Previene el comportamiento por defecto del formulario
     const newmensaje = { nombre, email, mensaje };
 
     try {
-      const response = await fetch("http:///localhost:5000/contacto", {
-        method: "POST",
+      const response = await axios.post("/contacto", newmensaje, {
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json", // Establecemos el tipo de contenido
         },
-        body: JSON.stringify(newmensaje),
       });
-      if (response.ok) {
+
+      // Verificamos si la respuesta fue exitosa
+      if (response.status >= 200 && response.status < 300) {
         // Limpiamos los campos del formulario
         setMensaje("");
         setNombre("");
