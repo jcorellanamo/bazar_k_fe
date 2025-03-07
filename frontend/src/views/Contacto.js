@@ -1,37 +1,33 @@
-// src/views/vontacto,js
+// src/views/Contacto.js
 import React, { useState } from "react";
 import "./Contacto.css";
 import axios from "axios"; // Importamos axios
+
 const Contacto = () => {
   const [nombre, setNombre] = useState("");
   const [email, setEmail] = useState("");
   const [mensaje, setMensaje] = useState("");
 
-  const API_URL = import.meta.env.VITE_API_URL;
-console.log("API_URL:", API_URL); // Esto nos ayuda a verificar si la variable se está leyendo
-
+  // Definir API_URL correctamente
+  const API_URL = import.meta.env.VITE_API_URL || "https://bazar-k-fe-tqh0.onrender.com";
+  console.log("API_URL en uso:", API_URL); // Verificación en consola
 
   const handleSubmit = async (e) => {
     e.preventDefault(); // Previene el comportamiento por defecto del formulario
     const newmensaje = { nombre, email, mensaje };
 
     try {
-      const API_URL = import.meta.env.VITE_API_URL || "https://bazar-k-fe-tqh0.onrender.com"; 
-const response = await axios.post(`${API_URL}/contacto`, newmensaje, {
-
+      const response = await axios.post(`${API_URL}/contacto`, newmensaje, {
         headers: {
           "Content-Type": "application/json",
         },
       });
-      
 
       // Verificamos si la respuesta fue exitosa
       if (response.status >= 200 && response.status < 300) {
-        // Limpiamos los campos del formulario
         setMensaje("");
         setNombre("");
         setEmail("");
-        // Mostrar alerta de éxito
         alert("¡Gracias por enviar tu formulario! Te contactaremos pronto.");
       } else {
         console.error("Error al enviar mensaje");
