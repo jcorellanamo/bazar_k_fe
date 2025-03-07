@@ -7,6 +7,10 @@ const Contacto = () => {
   const [email, setEmail] = useState("");
   const [mensaje, setMensaje] = useState("");
 
+  const API_URL = import.meta.env.VITE_API_URL;
+console.log("API_URL:", API_URL); // Esto nos ayuda a verificar si la variable se está leyendo
+
+
   const handleSubmit = async (e) => {
     e.preventDefault(); // Previene el comportamiento por defecto del formulario
     const newmensaje = { nombre, email, mensaje };
