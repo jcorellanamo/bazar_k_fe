@@ -10,11 +10,12 @@ function Register() {
   const [password, setPassword] = useState('');
   const [telefono, setTelefono] = useState('');
   const navigate = useNavigate(); // Hook para redirección
+  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
   // Función para verificar si el email ya está registrado
   async function verificarCorreoExistente(email) {
     try {
-      const response = await fetch(`http://localhost:5000/verificar-email?email=${email}`);
+      const response = await fetch(`${API_URL}/verificar-email?email=${email}`);
       const data = await response.json();
       return data.existe; // true si el correo ya está en la base de datos
     } catch (error) {
