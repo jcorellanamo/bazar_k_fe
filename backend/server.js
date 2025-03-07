@@ -307,13 +307,10 @@ app.post("/contacto", async (req, res) => {
     return res.status(400).json({ error: "Todos los campos son requeridos." });
   }
 
-  // Si id_usuario viene vacío o no está definido, lo convertimos a null
-  const userId = id_usuario && id_usuario.trim() !== "" ? id_usuario : null;
-
   try {
     const result = await pool.query(
-      "INSERT INTO contacto (id_usuario, nombre, email, mensaje) VALUES ($1, $2, $3, $4) RETURNING *",
-      [userId, nombre, email, mensaje]
+      "INSERT INTO contacto (nombre, email, mensaje) VALUES ($1, $2, $3) RETURNING *",
+      [nombre, email, mensaje]
     );
     res.status(201).json(result.rows[0]);
   } catch (err) {
