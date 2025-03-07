@@ -10,8 +10,11 @@ const pool = new Pool({
   database: process.env.DB_DATABASE,
   password: process.env.DB_PASSWORD,
   allowExitOnIdle: true,
-  ssl: true
-})
+  ssl: {
+    rejectUnauthorized: false
+  }
+});
+
 
 export {
     pool
