@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import "./Blog.css";
 
 const BlogVista1 = () => {
@@ -9,12 +9,8 @@ const BlogVista1 = () => {
   const [comentarios, setComentarios] = useState([]);
   const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
-  // Al montar el componente, obtenemos los comentarios existentes
-  useEffect(() => {
-    fetchComentarios();
-  }, []);
-
-  const fetchComentarios = async () => {
+  // Definir fetchComentarios con useCallback para mantener una referencia estable
+  const fetchComentarios = useCallback(async () => {
     try {
       const response = await fetch(`${API_URL}/comentarios`);
       const data = await response.json();
@@ -22,12 +18,17 @@ const BlogVista1 = () => {
     } catch (error) {
       console.error("Error fetching comments:", error);
     }
-  };
-  
+  }, [API_URL]);
+
+  // Ejecutar fetchComentarios al montar el componente
+  useEffect(() => {
+    fetchComentarios();
+  }, [fetchComentarios]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newComentario = { nombre, email, comentario };
-  
+
     try {
       const response = await fetch(`${API_URL}/comentarios`, {
         method: "POST",
@@ -48,7 +49,6 @@ const BlogVista1 = () => {
       console.error("Error:", error);
     }
   };
-  
 
   return (
     <div className="blog-container">
