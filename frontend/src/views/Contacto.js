@@ -16,7 +16,9 @@ console.log("API_URL:", API_URL); // Esto nos ayuda a verificar si la variable s
     const newmensaje = { nombre, email, mensaje };
 
     try {
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/contacto`, newmensaje, {
+      const API_URL = import.meta.env.VITE_API_URL || "https://bazar-k-fe-tqh0.onrender.com"; 
+const response = await axios.post(`${API_URL}/contacto`, newmensaje, {
+
         headers: {
           "Content-Type": "application/json",
         },
