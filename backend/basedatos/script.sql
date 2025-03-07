@@ -1,5 +1,5 @@
-CREATE DATABASE bazarkfe;
-\c bazarkfe;
+-- CREATE DATABASE bazarkfe;
+-- \c bazarkfe;
 
 -- Creación del tipo ENUM para el estado del pedido
 CREATE TYPE estado_pedido AS ENUM ('pendiente', 'enviado', 'entregado', 'cancelado');
