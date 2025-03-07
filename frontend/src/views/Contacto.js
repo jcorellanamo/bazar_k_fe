@@ -9,8 +9,12 @@ const Contacto = () => {
   const [mensaje, setMensaje] = useState("");
 
   // Definir API_URL correctamente
-  const API_URL = import.meta.env.VITE_API_URL || "https://bazar-k-fe-tqh0.onrender.com";
-  console.log("API_URL en uso:", API_URL); // Verificación en consola
+  const API_URL = typeof import.meta.env !== "undefined" && import.meta.env.VITE_API_URL
+  ? import.meta.env.VITE_API_URL
+  : "https://bazar-k-fe-tqh0.onrender.com";
+
+console.log("API_URL en uso:", API_URL);
+
 
   const handleSubmit = async (e) => {
     e.preventDefault(); // Previene el comportamiento por defecto del formulario
