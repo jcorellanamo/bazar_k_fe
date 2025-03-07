@@ -15,7 +15,7 @@ const Login = () => {
     try {
       const response = await axios.post(`${process.env.REACT_APP_API_URL}/login`, { email, password });
   
-      Swal.fire('¡Bienvenido!', 'Has iniciado sesión correctamente.', 'success');
+      Swal.fire('¡Bienvenido!', `Bienvenido, ${response.data.usuario.nombre}`, 'success');
       navigate('/'); // Redirigir a la página principal
     } catch (error) {
       console.error('Error al iniciar sesión:', error);
