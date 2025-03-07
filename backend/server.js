@@ -1,3 +1,4 @@
+//server.js
 // Importamos las dependencias necesarias para nuestra aplicación
 const express = require("express");
 const morgan = require("morgan");
@@ -24,8 +25,6 @@ const {
 const getUsuarioById = require("./consultas/getUsuarioById");
 const iniciarSesion = require("./consultas/iniciarSesion");
 
-
-
 require("dotenv").config();
 
 const app = express();
@@ -40,7 +39,7 @@ app.use(cookieParser());
 
 // Configuración de CORS
 const corsOptions = {
-  origin: "http://localhost:3000", // Permitir solicitudes desde localhost:3000 (frontend React)
+  origin: "*", // Permite solicitudes desde cualquier origen
   methods: ["GET", "POST", "PUT", "DELETE"], // Métodos permitidos
   allowedHeaders: ["Content-Type"], // Permitir los encabezados que tu solicitud usa (como Content-Type)
 };
@@ -115,7 +114,10 @@ app.post(
   "/login",
   [
     body("email").isEmail().withMessage("El email no es válido"),
-    body("password").isString().isLength({ min: 6 }).withMessage("La contraseña debe tener al menos 6 caracteres"),
+    body("password")
+      .isString()
+      .isLength({ min: 6 })
+      .withMessage("La contraseña debe tener al menos 6 caracteres"),
   ],
   async (req, res) => {
     // Validar los datos
@@ -129,7 +131,7 @@ app.post(
     try {
       // Llamar a la función de iniciar sesión y obtener el token
       const token = await iniciarSesion({ email, password });
-      
+
       // Responder con el token generado
       res.status(200).json({ token });
     } catch (error) {
