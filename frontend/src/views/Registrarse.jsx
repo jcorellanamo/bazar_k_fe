@@ -11,10 +11,13 @@ function Register() {
   const [telefono, setTelefono] = useState('');
   const navigate = useNavigate(); // Hook para redirección
 
-  // Definir API_URL usando VITE_API_URL de import.meta.env
-  const API_URL = typeof import.meta.env !== "undefined" && import.meta.env.VITE_API_URL
-    ? import.meta.env.VITE_API_URL
-    : "https://bazar-k-fe-1.onrender.com";
+  // Definir API_URL de manera robusta para usar VITE_API_URL si está definida
+  const API_URL =
+    typeof import.meta !== "undefined" &&
+    import.meta.env &&
+    import.meta.env.VITE_API_URL
+      ? import.meta.env.VITE_API_URL
+      : "https://bazar-k-fe-1.onrender.com";
 
   console.log("API_URL en uso:", API_URL);
 
