@@ -11,10 +11,10 @@ function Register() {
   const [telefono, setTelefono] = useState('');
   const navigate = useNavigate(); // Hook para redirección
 
+  // Usar process.env.REACT_APP_API_URL para CRA
   const API_URL = process.env.REACT_APP_API_URL || "https://bazar-k-fe-1.onrender.com";
   
   console.log("API_URL en uso:", API_URL);
-  console.log("import.meta.env:", import.meta.env);
 
   // Función para verificar si el email ya está registrado
   async function verificarCorreoExistente(email) {
