@@ -1,4 +1,4 @@
-//server.js
+// server.js
 // Importamos las dependencias necesarias para nuestra aplicación
 const express = require("express");
 const morgan = require("morgan");
@@ -20,7 +20,8 @@ const cambiarDatosPersonales = require("./consultas/cambiarDatosPersonales");
 const obtenerVentas = require("./consultas/obtenerVentas");
 const {
   registrarUsuario,
-  verificarCorreoExistente,
+  // La función verificarCorreoExistente que importas aquí no se utiliza en el GET,
+  // ya que definiremos el endpoint directamente.
 } = require("./consultas/registrarUsuario");
 const getUsuarioById = require("./consultas/getUsuarioById");
 const iniciarSesion = require("./consultas/iniciarSesion");
@@ -28,16 +29,14 @@ const iniciarSesion = require("./consultas/iniciarSesion");
 require("dotenv").config();
 
 const app = express();
-// server.js
 const PORT = process.env.PORT || 5000;
 
 // Configuración de CORS
 const corsOptions = {
-  origin: "https://zingy-treacle-ed92d4.netlify.app", // O especifica "https://zingy-treacle-ed92d4.netlify.app"
+  origin: "https://zingy-treacle-ed92d4.netlify.app", // O especifica tu dominio de frontend
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"]
 };
-
 
 app.use(cors(corsOptions));
 app.options('*', cors(corsOptions)); // Manejar solicitudes preflight
@@ -72,6 +71,25 @@ app.get("/", (req, res) => {
   });
 });
 
+// Endpoint para verificar si un email ya está registrado
+app.get("/verificar-email", async (req, res) => {
+  const { email } = req.query;
+  if (!email) {
+    return res.status(400).json({ error: "El email es requerido" });
+  }
+  try {
+    const result = await pool.query("SELECT * FROM usuarios WHERE email = $1", [email]);
+    if (result.rows.length > 0) {
+      return res.json({ existe: true });
+    } else {
+      return res.json({ existe: false });
+    }
+  } catch (error) {
+    console.error("Error al verificar el email:", error);
+    res.status(500).json({ error: "Error interno" });
+  }
+});
+
 // RUTA PARA REGISTRO DE NUEVOS USUARIOS
 app.post(
   "/registro",
@@ -91,12 +109,10 @@ app.post(
     const { email } = req.body;
 
     try {
-      // Verificar si el correo ya está registrado
-      const usuarioExistente = await verificarCorreoExistente(email);
-      if (usuarioExistente) {
-        return res
-          .status(400)
-          .json({ error: "El correo electrónico ya está registrado" });
+      // Verificar si el correo ya está registrado usando el endpoint GET que definimos
+      const result = await pool.query("SELECT * FROM usuarios WHERE email = $1", [email]);
+      if (result.rows.length > 0) {
+        return res.status(400).json({ error: "El correo electrónico ya está registrado" });
       }
 
       // Si el correo no está registrado, proceder con el registro
@@ -110,8 +126,6 @@ app.post(
 );
 
 // RUTA LOGIN PARA USUARIOS
-
-// Ruta de inicio de sesión
 app.post(
   "/login",
   [
@@ -122,7 +136,6 @@ app.post(
       .withMessage("La contraseña debe tener al menos 6 caracteres"),
   ],
   async (req, res) => {
-    // Validar los datos
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
@@ -131,35 +144,13 @@ app.post(
     const { email, password } = req.body;
 
     try {
-      // Llamar a la función de iniciar sesión y obtener el token
       const token = await iniciarSesion({ email, password });
-
-      // Responder con el token generado
       res.status(200).json({ token });
     } catch (error) {
-      // En caso de error (usuario no encontrado o contraseña incorrecta)
       res.status(401).json({ error: error.message });
     }
   }
 );
-
-// app.post(
-//   "/login",
-//   [body("email").isEmail(), body("password").isString().isLength({ min: 6 })],
-//   async (req, res) => {
-//     const errors = validationResult(req);
-//     if (!errors.isEmpty()) {
-//       return res.status(400).json({ errors: errors.array() });
-//     }
-//     try {
-//       const token = await iniciarSesion(req.body);
-//       res.status(200).json({ token });
-//     } catch (error) {
-//       console.error("Error en el inicio de sesión:", error.message);
-//       res.status(401).json({ error: "Credenciales incorrectas" });
-//     }
-//   }
-// );
 
 // RUTA PARA PRODUCTOS
 app.get("/productos", async (req, res) => {
@@ -233,11 +224,9 @@ app.delete("/productos/:id", async (req, res) => {
 
   try {
     const productoEliminado = await eliminarProducto(id);
-
     if (!productoEliminado) {
       return res.status(404).json({ error: "Producto no encontrado" });
     }
-
     res.status(200).json({ message: "Producto eliminado con éxito" });
   } catch (error) {
     console.error("Error al eliminar producto:", error.message);
@@ -271,11 +260,9 @@ app.put("/productos/:id", async (req, res) => {
       intensidad,
       origen
     );
-
     if (!productoModificado) {
       return res.status(404).json({ error: "Producto no encontrado" });
     }
-
     res.status(200).json({
       message: "Producto modificado con éxito",
       producto: productoModificado,
@@ -298,6 +285,7 @@ app.get("/datospersonales", verifyToken, async (req, res) => {
     res.status(500).json({ error: "Error al obtener datos personales" });
   }
 });
+
 // RUTA PARA INSERTAR UN CONTACTO
 app.post("/contacto", async (req, res) => {
   console.log("Solicitud recibida en /contacto");
@@ -318,8 +306,6 @@ app.post("/contacto", async (req, res) => {
     res.status(500).json({ error: "Error al insertar contacto.", details: err.message });
   }
 });
-
-
 
 // INICIAR SERVIDOR
 app.listen(PORT, () => {
