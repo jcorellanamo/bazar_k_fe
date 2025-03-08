@@ -25,7 +25,7 @@ const registrarUsuario = async (datos) => {
   const { nombre, apellido, email, password, telefono } = datos;
 
   const consulta = `
-    INSERT INTO usuarios (nombre, apellido, email, contraseña, telefono)
+    INSERT INTO usuarios (nombre, apellido, email, "contraseña", telefono)
     VALUES ($1, $2, $3, $4, $5)
     RETURNING *;
   `;
