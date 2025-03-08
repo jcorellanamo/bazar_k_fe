@@ -11,7 +11,7 @@ function Register() {
   const [telefono, setTelefono] = useState('');
   const navigate = useNavigate(); // Hook para redirección
 
-  // Usar process.env.REACT_APP_API_URL para CRA
+  // Definir API_URL correctamente usando process.env.REACT_APP_API_URL
   const API_URL = process.env.REACT_APP_API_URL || "https://bazar-k-fe-1.onrender.com";
   
   console.log("API_URL en uso:", API_URL);

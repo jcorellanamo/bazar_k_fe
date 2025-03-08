@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios'; // Importar Axios
+import axios from 'axios';
 import './Login.css';
 import Swal from 'sweetalert2';
 
@@ -8,16 +8,13 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
-  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
-
 
   const handleSubmit = async (event) => {
     event.preventDefault();
   
     try {
-      const response = await axios.post(`${API_URL}/login`, { email, password });
-      console.log('Respuesta del servidor:', response.data);
-      localStorage.setItem('token', response.data.token);
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/login`, { email, password });
+  
       Swal.fire('¡Bienvenido!', `Bienvenido, ${response.data.usuario.nombre}`, 'success');
       navigate('/'); // Redirigir a la página principal
     } catch (error) {
@@ -26,7 +23,6 @@ const Login = () => {
     }
   };
   
-
   return (
     <div className="page-container">
       <div className="login-container">
@@ -84,4 +80,3 @@ const Login = () => {
 };
 
 export default Login;
-
