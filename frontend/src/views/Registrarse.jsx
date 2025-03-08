@@ -53,8 +53,9 @@ function Register() {
       "apellido": apellido,
       "email": email,
       "telefono": telefono,
-      "password": password
+      "contraseña": password  // Cambiado de "password" a "contraseña"
     });
+    
 
     const requestOptions = {
       method: "POST",
