@@ -11,9 +11,16 @@ function Register() {
   const [telefono, setTelefono] = useState('');
   const navigate = useNavigate(); // Hook para redirección
 
-  // Usar encadenamiento opcional para acceder a VITE_API_URL
-  const API_URL = import.meta?.env?.VITE_API_URL || "https://bazar-k-fe-1.onrender.com";
-
+  // Definir API_URL de manera segura
+  let API_URL = "https://bazar-k-fe-1.onrender.com";
+  try {
+    if (import.meta && import.meta.env && import.meta.env.VITE_API_URL) {
+      API_URL = import.meta.env.VITE_API_URL;
+    }
+  } catch (error) {
+    API_URL = "https://bazar-k-fe-1.onrender.com";
+  }
+  
   console.log("API_URL en uso:", API_URL);
 
   // Función para verificar si el email ya está registrado
