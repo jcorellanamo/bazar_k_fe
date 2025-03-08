@@ -3,8 +3,6 @@
 require("dotenv").config();
 const { pool } = require("../coneccion/coneccion");
 
-
-
 // Función para verificar si el correo ya está registrado
 const verificarCorreoExistente = async (email) => {
   const consulta = `
@@ -16,9 +14,8 @@ const verificarCorreoExistente = async (email) => {
   } catch (error) {
     console.error("Error al verificar correo:", error);
     throw error;
-   }
- };
-
+  }
+};
 
 // Función para registrar el usuario
 const registrarUsuario = async (datos) => {
@@ -34,6 +31,7 @@ const registrarUsuario = async (datos) => {
 
   try {
     const { rows } = await pool.query(consulta, values);
+    console.log("Usuario insertado:", rows[0]); // Para depuración
     return rows[0]; // Retorna el usuario insertado, incluyendo su id generado.
   } catch (error) {
     console.error("Error al registrar usuario:", error);
