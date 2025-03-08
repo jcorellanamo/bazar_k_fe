@@ -12,7 +12,6 @@ function Register() {
   const navigate = useNavigate(); // Hook para redirección
 
   const API_URL = process.env.REACT_APP_API_URL || "https://bazar-k-fe-1.onrender.com";
-
   
   console.log("API_URL en uso:", API_URL);
   console.log("import.meta.env:", import.meta.env);
