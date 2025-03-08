@@ -9,9 +9,8 @@ const Contacto = () => {
   const [mensaje, setMensaje] = useState("");
 
   // Definir API_URL correctamente
-  const API_URL = typeof import.meta.env !== "undefined" && import.meta.env.VITE_API_URL
-  ? import.meta.env.VITE_API_URL
-  : "https://bazar-k-fe-1.onrender.com";
+  const API_URL = process.env.REACT_APP_API_URL || "https://bazar-k-fe-1.onrender.com";
+
 
 console.log("API_URL en uso:", API_URL);
 
