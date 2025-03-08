@@ -10,7 +10,13 @@ function Register() {
   const [password, setPassword] = useState('');
   const [telefono, setTelefono] = useState('');
   const navigate = useNavigate(); // Hook para redirección
-  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
+  // Definir API_URL usando VITE_API_URL de import.meta.env
+  const API_URL = typeof import.meta.env !== "undefined" && import.meta.env.VITE_API_URL
+    ? import.meta.env.VITE_API_URL
+    : "https://bazar-k-fe-1.onrender.com";
+
+  console.log("API_URL en uso:", API_URL);
 
   // Función para verificar si el email ya está registrado
   async function verificarCorreoExistente(email) {
@@ -59,7 +65,7 @@ function Register() {
       redirect: "follow"
     };
 
-    fetch("http://localhost:5000/registro", requestOptions)
+    fetch(`${API_URL}/registro`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
         if (result.error) {
